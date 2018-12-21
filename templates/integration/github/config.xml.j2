@@ -1,0 +1,17 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<github-plugin-configuration plugin="github@1.29.3">
+  <configs>
+    {% for server in jenkins_github_servers %}
+    <github-server-config>
+      <name>{{ server.name }}</name>
+      <apiUrl>{{ server.api_url | default('https://api.github.com') }}</apiUrl>
+      <manageHooks>{{ (server.manage_hooks | default(true)) | ternary('true','false') }}</manageHooks>
+      <credentialsId>{{ server.credentials_id | default(jenkins_github_credentials_id) }}</credentialsId>
+      <clientCacheSize>{{ server.client_cache_size | default(20) }}</clientCacheSize>
+    </github-server-config>
+    {% endfor %}
+  </configs>
+  <hookSecretConfig>
+    <credentialsId></credentialsId>
+  </hookSecretConfig>
+</github-plugin-configuration>

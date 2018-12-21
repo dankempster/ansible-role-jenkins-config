@@ -1,0 +1,79 @@
+---
+# Update Jenkins so that plugin updates don't fail.
+- name: Create update directory
+  file:
+    path: "{{ jenkins_home }}/updates"
+    state: directory
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+  become: true
+
+- name: Download current plugin updates from Jenkins update site
+  get_url:
+    url: http://updates.jenkins-ci.org/update-center.json
+    dest: "{{ jenkins_home }}/updates/default.json"
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    mode: 0440
+  changed_when: false
+  become: true
+
+- name: Remove first and last line from json file
+  replace:
+    path: "{{ jenkins_home }}/updates/default.json"
+    regexp: "1d;$d"
+  become: true
+
+- name: Ensure Job-DSL will be installed
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins 
+      + [{'name':'job-dsl'}]
+      }}"
+  when: "jenkins_nodejs_installations
+    and (
+      jenkins_config_plugins | json_query('[?name==`job-dsl`].name')
+    ) | count == 0"
+
+- name: Install Jenkins plugins using password.
+  jenkins_plugin:
+    name: "{{ item.name | default(item) }}"
+    jenkins_home: "{{ jenkins_home }}"
+    url_username: "{{ jenkins_admin_username }}"
+    url_password: "{{ jenkins_admin_password }}"
+    state: "{{ item.state | default(jenkins_plugins_state) }}"
+    timeout: "{{ item.timeout | default(jenkins_plugin_timeout) }}"
+    updates_expiration: "{{ item.updates_expiration | default(jenkins_plugin_updates_expiration) }}"
+    url: "{{ jenkins_uri }}"
+    with_dependencies: "{{ item.with_dependencies | default(jenkins_plugins_install_dependencies) }}"
+  with_items: "{{ jenkins_config_plugins }}"
+  when: jenkins_admin_password != ""
+  notify: restart jenkins
+
+- name: Configure DSL
+  template:
+    src: "templates/core/job-dsl/security-config.xml.j2"
+    dest: "{{ jenkins_home }}/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    mode: 0440
+  notify: restart jenkins
+  become: true
+
+# ensure Jenkins is restarted if need be, by flushing the handlers
+- meta: flush_handlers
+
+# wait for Jenkins to be available again
+- name: Wait for Jenkins to start up before proceeding.
+  command: >
+    curl -D - --silent --max-time 5 http://{{ jenkins_hostname }}:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/cli/
+  args:
+    warn: false
+  register: result
+  until: >
+    (result.stdout.find("403 Forbidden") != -1)
+    or (result.stdout.find("200 OK") != -1)
+    and (result.stdout.find("Please wait while") == -1)
+  retries: "{{ jenkins_connection_retries }}"
+  delay: "{{ jenkins_connection_delay }}"
+  changed_when: false
+  check_mode: false

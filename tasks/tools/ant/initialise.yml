@@ -1,0 +1,10 @@
+---
+- name: Do we need to install the Apache Ant tool plugin?
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins 
+      + [{'name':'ant'}]
+      }}"
+  when: "jenkins_ant_installations
+    and (
+      jenkins_config_plugins | json_query('[?name==`nodejs`].name')
+    ) | count == 0"

@@ -1,0 +1,30 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.tasks.Ant_-DescriptorImpl plugin="ant@1.9">
+  <installations>
+    {% for installation in jenkins_ant_installations %}
+    <hudson.tasks.Ant_-AntInstallation>
+      <name>{{ installation.name }}</name>
+      
+      {% if not installation.version | default(false) %}
+      <home>{{ installation.home | default('ant') }}</home>
+      {% else %}
+      <home>{{ installation.home | default('') }}</home>
+      {% endif %}
+
+      {% if installation.version | default(false) %}
+      <properties>
+        <hudson.tools.InstallSourceProperty>
+          <installers>
+            <hudson.tasks.Ant_-AntInstaller>
+              <id>{{ installation.version }}</id>
+            </hudson.tasks.Ant_-AntInstaller>
+          </installers>
+        </hudson.tools.InstallSourceProperty>
+      </properties>
+      {% else %}
+      <properties />
+      {% endif %}
+    </hudson.tasks.Ant_-AntInstallation>
+    {% endfor %}
+  </installations>
+</hudson.tasks.Ant_-DescriptorImpl>

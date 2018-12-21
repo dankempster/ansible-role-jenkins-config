@@ -1,0 +1,10 @@
+---
+- name: Do we need to install the Git plugin?
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins 
+      + [{'name':'git'}]
+      }}"
+  when: "jenkins_git_installations
+    and (
+      jenkins_config_plugins | json_query('[?name==`git`].name')
+    ) | count == 0"

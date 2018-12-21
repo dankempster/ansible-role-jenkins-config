@@ -1,0 +1,20 @@
+---
+- name: Do we need to install the Github plugin?
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins 
+      + [{'name':'github'}]
+      }}"
+  when: "jenkins_github_enabled
+    and (
+      jenkins_config_plugins | json_query('[?name==`github`].name')
+    ) | count == 0"
+
+- name: Add Github token to Jenkins 'secret text' credentials variable
+  set_fact:
+    jenkins_credentials_secret_text: "{{
+      jenkins_credentials_secret_text + [{
+        'name': 'Github (Admin)',
+        'secret': jenkins_github_token,
+        'scope': 'GLOBAL'
+      }] }}"
+  when: "jenkins_github_enabled or jenkins_github_token != ''"

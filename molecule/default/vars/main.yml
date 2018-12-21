@@ -1,0 +1,28 @@
+---
+jenkins_home: /opt/jenkins
+jenkins_hostname: jenkins
+jenkins_domain: ""
+
+jenkins_config_plugins: []
+
+jenkins_git_config_name: Dan Kempster
+jenkins_git_config_email: me@dankempster.co.uk
+jenkins_git_installations:
+  - name: Default
+    home: git
+
+jenkins_github_enabled: true
+jenkins_github_token: SECRETGITHUBTOKEN
+
+jenkins_nodejs_installations:
+  - name: nodejs
+    version: 11.5.0
+
+jenkins_ant_installations:
+  - name: local
+    home: ant
+  - name: ant11
+    version: 11.5.0
+
+jenkins_admin_username: ''
+jenkins_admin_password: ''

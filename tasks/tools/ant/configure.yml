@@ -1,0 +1,10 @@
+---
+- name: Ensure Apache Ant tool configuration file
+  template:
+    src: "templates/tools/Ant/config.xml.j2"
+    dest: "{{ jenkins_home }}/hudson.tasks.Ant.xml"
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    mode: 0440
+  notify: restart jenkins
+  become: true
