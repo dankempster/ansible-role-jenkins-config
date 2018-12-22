@@ -17,6 +17,13 @@ jenkins_github_servers:
     credentials_id: "{{ jenkins_github_credentials_id }}"
     client_cache_size: 20
 
+
+jenkins_credentials_base_enabled: false
+jenkins_credentials_base_file: "{{
+    playbook_dir
+    ~ '/files/jenkins/credentials.xml'
+  }}"
+
 # jenkins_credentials_user_pass: []
 # jenkins_credentials_ssh_key: []
 # jenkins_credentials_secret_file: []

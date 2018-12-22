@@ -66,6 +66,18 @@
   become: true
   notify: restart jenkins
 
+- name: Seed credentials file (when not exists)
+  template:
+    src: "{{ jenkins_credentials_base_file }}"
+    dest: "{{ jenkins_home }}/credentials.xml"
+    mode: 0644
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    force: false
+  become: true
+  when: jenkins_credentials_base_enabled == true
+  notify: restart jenkins
+
 
 #
 #
