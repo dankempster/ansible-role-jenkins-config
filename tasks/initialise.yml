@@ -42,7 +42,6 @@
     backup: "yes"
   become: true
   notify: restart jenkins
-  register: jenkins_config
 
 - name: Configure Jenkins location
   template:
