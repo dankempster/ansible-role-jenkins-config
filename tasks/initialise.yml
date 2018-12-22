@@ -32,6 +32,18 @@
 #
 ### CONFIG
 #
+- name: Ensure Jenkins secret key
+  copy:
+    dest: "{{ jenkins_home }}/secret.key"
+    content: "{{ jenkins_secret_key }}"
+    mode: 0644
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    force: true
+  become: true
+  notify: restart jenkins
+  when: jenkins_secret_key | default(false, true) != false
+
 - name: Configure Jenkins
   template:
     src: templates/jenkins/config.xml.j2
