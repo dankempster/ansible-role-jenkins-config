@@ -65,7 +65,7 @@
     and item.secret | default(false, true) != false
   with_items:
     - secret: "{{ jenkins_intermediate_key }}"
-      path: secrets/hudson.util.Secret }
+      path: secrets/hudson.util.Secret
   no_log: true
 
 - name: Configure Jenkins
