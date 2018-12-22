@@ -32,17 +32,41 @@
 #
 ### CONFIG
 #
-- name: Ensure Jenkins secret key
+- name: Ensure Jenkins secret key (1/2)
   copy:
-    dest: "{{ jenkins_home }}/secret.key"
-    content: "{{ jenkins_secret_key }}"
-    mode: 0644
+    dest: "{{ jenkins_home }}/{{ item.path }}"
+    content: "{{ item.secret }}"
+    mode: 0640
     owner: "{{ jenkins_owner }}"
     group: "{{ jenkins_group }}"
-    force: true
+    force: false
   become: true
   notify: restart jenkins
-  when: jenkins_secret_key | default(false, true) != false
+  when: |
+    jenkins_credentials_base_enabled == true
+    and item.secret | default(false, true) != false
+  with_items:
+    - { secret: "{{ jenkins_secret_key }}", path: secret.key }
+    - { secret: "{{ jenkins_master_key }}", path: secrets/master.key }
+  no_log: true
+
+- name: Ensure Jenkins secret key (2/2)
+  copy:
+    dest: "{{ jenkins_home }}/{{ item.path }}"
+    content: "{{ item.secret | b64decode }}"
+    mode: 0640
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    force: false
+  become: true
+  notify: restart jenkins
+  when: |
+    jenkins_credentials_base_enabled == true
+    and item.secret | default(false, true) != false
+  with_items:
+    - secret: "{{ jenkins_intermediate_key }}"
+      path: secrets/hudson.util.Secret }
+  no_log: true
 
 - name: Configure Jenkins
   template:

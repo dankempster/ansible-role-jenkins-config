@@ -3,6 +3,14 @@ jenkins_config_plugins: []
 jenkins_config_shell: /bin/bash
 
 jenkins_secret_key: ~
+#
+# jenkins master key, neccassary to use the jenkins_credentials_base_file
+#   option
+jenkins_master_key: ~
+#
+# Intermediat key to go with the above master key
+#   must be base64 encoded
+jenkins_intermediate_key: ~
 
 jenkins_cli_enabled: true
 
