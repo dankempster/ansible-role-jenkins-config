@@ -13,6 +13,7 @@
   set_fact:
     jenkins_credentials_secret_text: "{{
       jenkins_credentials_secret_text + [{
+        'id': jenkins_github_credentials_id,
         'name': 'Github (Admin)',
         'secret': jenkins_github_token,
         'scope': 'GLOBAL'
