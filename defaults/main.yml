@@ -3,9 +3,7 @@ jenkins_config_plugins: []
 
 jenkins_cli_enabled: true
 
-jenkins_git_installations:
-  - name: default
-    home: git
+jenkins_git_installations: []
 jenkins_git_config_name: John Smith
 jenkins_git_config_email: john@example.com
 
