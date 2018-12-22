@@ -1,5 +1,6 @@
 ---
 jenkins_config_plugins: []
+jenkins_config_shell: /bin/bash
 
 jenkins_cli_enabled: true
 

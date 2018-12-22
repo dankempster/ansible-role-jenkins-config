@@ -65,6 +65,17 @@
   become: true
   notify: restart jenkins
 
+- name: Configure Jenkins Shell
+  template:
+    src: templates/jenkins/shell.xml.j2
+    dest: "{{ jenkins_home }}/hudson.tasks.Shell.xml"
+    owner: "{{ jenkins_owner }}"
+    group: "{{ jenkins_group }}"
+    mode: 0644
+    backup: "yes"
+  become: true
+  notify: restart jenkins
+
 - name: Seed credentials file (when not exists)
   template:
     src: "{{ jenkins_credentials_base_file }}"
