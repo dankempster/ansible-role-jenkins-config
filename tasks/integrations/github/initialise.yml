@@ -1,4 +1,6 @@
 ---
+- include: tools/git/client.yml
+
 - name: Do we need to install the Github plugin?
   set_fact:
     jenkins_config_plugins: "{{ jenkins_config_plugins 
