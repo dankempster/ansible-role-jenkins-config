@@ -26,3 +26,16 @@ jenkins_ant_installations:
 
 jenkins_admin_username: ''
 jenkins_admin_password: ''
+
+jenkins_credentials_secret_text: 
+  - name: Eyes Only
+    username: me
+    secret: my-eyes-only-secret
+    id: com.github.eyes-only
+
+jenkins_credentials_ssh_private_keys: 
+  - name: Github
+    username: my-github-user
+    privatekey: my-super-secret-private-key
+    passphrase: secret
+    id: com.github.my-github-user.key

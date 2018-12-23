@@ -3,14 +3,6 @@ jenkins_config_plugins: []
 jenkins_config_shell: /bin/bash
 
 jenkins_secret_key: ~
-#
-# jenkins master key, neccassary to use the jenkins_credentials_base_file
-#   option
-jenkins_master_key: ~
-#
-# Intermediat key to go with the above master key
-#   must be base64 encoded
-jenkins_intermediate_key: ~
 
 jenkins_cli_enabled: true
 
@@ -28,15 +20,8 @@ jenkins_github_servers:
     credentials_id: "{{ jenkins_github_credentials_id }}"
     client_cache_size: 20
 
-
-jenkins_credentials_base_enabled: false
-jenkins_credentials_base_file: "{{
-    playbook_dir
-    ~ '/files/jenkins/credentials.xml'
-  }}"
-
 # jenkins_credentials_user_pass: []
-# jenkins_credentials_ssh_key: []
+jenkins_credentials_ssh_private_keys: []
 # jenkins_credentials_secret_file: []
 jenkins_credentials_secret_text: []
 # jenkins_credentials_certificates: []
