@@ -42,6 +42,13 @@ jenkins_home: /var/lib/jenkins
 jenkins_hostname: localhost
 jenkins_http_port: 8080
 jenkins_url_prefix: ""
+jenkins_uri: "http://{{
+    jenkins_hostname ~ ':' ~ jenkins_http_port
+    ~ (jenkins_url_prefix | ternary(
+      '/' ~ jenkins_url_prefix,
+      ''
+    ))
+  }}"
 
 jenkins_plugins_state: present
 jenkins_plugin_updates_expiration: 86400
