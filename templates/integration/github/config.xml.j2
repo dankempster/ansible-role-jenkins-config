@@ -6,7 +6,7 @@
       <name>{{ server.name }}</name>
       <apiUrl>{{ server.api_url | default('https://api.github.com') }}</apiUrl>
       <manageHooks>{{ (server.manage_hooks | default(true)) | ternary('true','false') }}</manageHooks>
-      <credentialsId>{{ server.credentials_id | default(jenkins_github_credentials_id) }}</credentialsId>
+      <credentialsId>{{ server.credentials_id | default(jenkins_github_token_id) }}</credentialsId>
       <clientCacheSize>{{ server.client_cache_size | default(20) }}</clientCacheSize>
     </github-server-config>
     {% endfor %}

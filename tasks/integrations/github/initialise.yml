@@ -4,20 +4,35 @@
 - name: Do we need to install the Github plugin?
   set_fact:
     jenkins_config_plugins: "{{ jenkins_config_plugins 
-      + [{'name':'github'}]
+      + [{'name':'pipeline-github'}]
       }}"
   when: "jenkins_github_enabled
     and (
-      jenkins_config_plugins | json_query('[?name==`github`].name')
+      jenkins_config_plugins | json_query('[?name==`pipeline-github`].name')
     ) | count == 0"
 
 - name: Add Github token to Jenkins 'secret text' credentials variable
   set_fact:
     jenkins_credentials_secret_text: "{{
       jenkins_credentials_secret_text + [{
-        'id': jenkins_github_credentials_id,
-        'name': jenkins_github_credentials_name,
+        'id': 'com.github.token',
+        'name': 'Github token',
         'secret': jenkins_github_token,
         'scope': 'GLOBAL'
       }] }}"
-  when: "jenkins_github_enabled or jenkins_github_token != ''"
+  when: "jenkins_github_enabled
+    and jenkins_github_token != ''"
+
+- name: Add Github login to Jenkins 'user/pass' credentials variable
+  set_fact:
+    jenkins_credentials_user_pass: "{{
+      jenkins_credentials_user_pass + [{
+        'id': 'com.github.primary',
+        'name': 'Github primary login',
+        'username': jenkins_github_username,
+        'password': jenkins_github_token,
+        'scope': 'GLOBAL'
+      }] }}"
+  when: "jenkins_github_enabled
+    and jenkins_github_token != ''
+    and jenkins_github_username != ''"

@@ -12,12 +12,15 @@ jenkins_git_config_email: john@example.com
 
 jenkins_github_enabled: false
 jenkins_github_token: ""
-jenkins_github_credentials_name: "Github token"
-jenkins_github_credentials_id: "com.github.token"
+jenkins_github_token_name: "Github token"
+jenkins_github_token_id: "com.github.token"
+jenkins_github_username: ""
+jenkins_github_login_name: "Github prime login"
+jenkins_github_login_id: "com.github.prime-login"
 jenkins_github_servers:
   - name: Github
     api_url: https://api.github.com
-    credentials_id: "{{ jenkins_github_credentials_id }}"
+    credentials_id: "{{ jenkins_github_token_id }}"
     client_cache_size: 20
 
 jenkins_env_python_enabled: false
