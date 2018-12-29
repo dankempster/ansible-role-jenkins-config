@@ -23,7 +23,7 @@ jenkins_github_servers:
 jenkins_env_python_enabled: false
 jenkins_env_molecule_enabled: false
 
-# jenkins_credentials_user_pass: []
+jenkins_credentials_user_pass: []
 jenkins_credentials_ssh_private_keys: []
 # jenkins_credentials_secret_file: []
 jenkins_credentials_secret_text: []

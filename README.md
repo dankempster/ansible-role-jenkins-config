@@ -88,7 +88,7 @@ jenkins_security_disable_remember_me: false
 ### Jenkins Credentials
 
 ```
-# jenkins_credentials_user_pass: []
+jenkins_credentials_user_pass: []
 # jenkins_credentials_ssh_key: []
 # jenkins_credentials_secret_file: []
 jenkins_credentials_secret_text: []
