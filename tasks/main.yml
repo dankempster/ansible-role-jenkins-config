@@ -3,6 +3,18 @@
 - name: Initialise
   include: initialise.yml
 
+- name: Install distro packages
+  package:
+    name: "{{ jenkins_install_distro_packages }}"
+    state: present
+  become: true
+
+- name: Install pip packages
+  pip:
+    name: "{{ jenkins_install_pip_packages }}"
+    state: present
+  become: true
+
 - name: Manage plugins
   include: install-plugins.yml
 
