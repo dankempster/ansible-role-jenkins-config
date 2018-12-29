@@ -39,8 +39,11 @@ jenkins_ant_installations: []
 jenkins_dsl_enabled: false
 jenkins_dsl_security: true
 
+jenkins_user: jenkins
 jenkins_owner: jenkins
 jenkins_group: jenkins
+# password for SSH user. Defaults to jenkins_admin_password when blank.
+jenkins_user_password: ""
 
 jenkins_connection_delay: 5
 jenkins_connection_retries: 60
@@ -81,3 +84,9 @@ jenkins_security_disable_remember_me: false
 jenkins_install_distro_packages: []
 jenkins_install_pip_packages: []
 
+# name of master node for this farm
+jenkins_farm_enabled: false
+jenkins_farm_master: jenkins_master
+jenkins_farm_role: "{{
+  (inventory_hostname == jenkins_farm_master) | ternary('master', 'slave')
+  }}"

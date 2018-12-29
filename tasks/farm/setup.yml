@@ -1,0 +1,6 @@
+---
+
+- name: Set up the Master node
+  include: setup-master.yml
+  when: jenkins_farm_role == 'master'
+

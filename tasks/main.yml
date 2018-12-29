@@ -3,36 +3,13 @@
 - name: Initialise
   include: initialise.yml
 
-- name: Install distro packages
-  package:
-    name: "{{ jenkins_install_distro_packages }}"
-    state: present
-  become: true
+- name: Install dependencies
+  include: dependencies.yml
 
-- name: Install pip packages
-  pip:
-    name: "{{ jenkins_install_pip_packages }}"
-    state: present
-  become: true
+- name: Setup Jenkins
+  include: setup.yml
+  when: jenkins_farm_role == 'master'
 
-- name: Manage plugins
-  include: install-plugins.yml
-
-- name: Ensure credentials
-  include: credentials.yml
-
-- name: Manage Git tools
-  include: tools/git/configure.yml
-  when: jenkins_git_installations
-
-- name: Manage Apache ant tools
-  include: tools/ant/configure.yml
-  when: jenkins_ant_installations
-
-- name: Manage nodeJS tools
-  include: tools/nodejs/configure.yml
-  when: jenkins_nodejs_installations
-
-- name: Configure github
-  include: integrations/github/configure.yml
-  when: jenkins_github_enabled
+- name: Setup Jenkins farm
+  include: farm/setup.yml
+  when: jenkins_farm_enabled

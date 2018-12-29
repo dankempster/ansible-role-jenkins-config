@@ -15,8 +15,8 @@
   set_fact:
     jenkins_credentials_secret_text: "{{
       jenkins_credentials_secret_text + [{
-        'id': 'com.github.token',
-        'name': 'Github token',
+        'id': jenkins_github_token_id,
+        'name': jenkins_github_token_name,
         'secret': jenkins_github_token,
         'scope': 'GLOBAL'
       }] }}"
@@ -27,8 +27,8 @@
   set_fact:
     jenkins_credentials_user_pass: "{{
       jenkins_credentials_user_pass + [{
-        'id': 'com.github.primary',
-        'name': 'Github primary login',
+        'id': jenkins_github_token_id,
+        'name': jenkins_github_login_name,
         'username': jenkins_github_username,
         'password': jenkins_github_token,
         'scope': 'GLOBAL'
