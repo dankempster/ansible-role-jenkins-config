@@ -68,3 +68,14 @@
 ### INTEGRATIONS
 #
 - include: integrations/github/initialise.yml
+
+
+#
+#
+### ENVIRONMENTS
+#
+- include: environments/python.yml
+  when: jenkins_env_python_enabled
+
+- include: environments/ansible-molecule.yml
+  when: jenkins_env_molecule_enabled
