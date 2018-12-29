@@ -77,5 +77,8 @@
 - include: environments/python.yml
   when: jenkins_env_python_enabled
 
+- include: environments/docker.yml
+  when: jenkins_env_docker_enabled
+
 - include: environments/ansible-molecule.yml
   when: jenkins_env_molecule_enabled

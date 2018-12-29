@@ -1,0 +1,8 @@
+---
+
+- name: Ensure Python's docker package will be installed
+  set_fact:
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages 
+      + ['docker']
+      }}"
+  when: "'docker' not in jenkins_install_pip_packages"
