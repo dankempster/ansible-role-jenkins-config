@@ -23,3 +23,10 @@
       + ['docker']
       }}"
   when: "'docker' not in jenkins_install_pip_packages"
+
+- name: Ensure Jenkins is in the docker group
+  become: true
+  user:
+    name: "{{ jenkins_user }}"
+    group: docker
+    append: true
