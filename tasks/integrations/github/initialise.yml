@@ -27,7 +27,7 @@
   set_fact:
     jenkins_credentials_user_pass: "{{
       jenkins_credentials_user_pass + [{
-        'id': jenkins_github_token_id,
+        'id': jenkins_github_login_id,
         'name': jenkins_github_login_name,
         'username': jenkins_github_username,
         'password': jenkins_github_token,
