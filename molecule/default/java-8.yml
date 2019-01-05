@@ -6,6 +6,10 @@
     - ansible_distribution == "Ubuntu"
     - ansible_distribution_version == "14.04"
 
+- name: Node vars
+  debug:
+      var: hostvars[inventory_hostname]
+
 - name: ansible_lsb
   debug:
       var: ansible_lsb
