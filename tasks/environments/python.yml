@@ -30,3 +30,4 @@
   when: "item not in jenkins_install_distro_packages"
   with_items:
     - libffi
+    - libssl
