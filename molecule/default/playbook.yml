@@ -7,7 +7,7 @@
 
   pre_tasks:
     - include_tasks: java-8.yml
-      when: architecture != 'armv7l'
+      when: ansible_architecture != 'armv7l'
 
   roles:
     - role: geerlingguy.git
