@@ -19,10 +19,3 @@
       become: true
 
     - role: ../../../
-
-  post_tasks:
-    - name: Check if Jenkins is running.
-      uri:
-        url: "http://127.0.0.1:8080/"
-      retries: "{{ jenkins_connection_retries }}"
-      delay: "{{ jenkins_connection_delay }}"
