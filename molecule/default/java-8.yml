@@ -12,7 +12,7 @@
     repo: 'deb http://ftp.debian.org/debian {{ ansible_distribution_release }}-backports main'
     state: present
     filename: "{{ ansible_distribution_release }}_backports"
-  when: ansible_distribution == "Debian"
+  when: (ansible_lsb.id | default(ansible_distribution)) | lower == "debian"
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=600
@@ -27,7 +27,7 @@
       - openjdk-8-jre-headless
       - ca-certificates-java
     state: present
-  when: ansible_distribution == "Debian"
+  when: (ansible_lsb.id | default(ansible_distribution)) | lower == "debian"
 
 # Red Hat.
 - name: Set the java_packages variable (RedHat).
@@ -48,4 +48,4 @@
   set_fact:
     java_packages:
       - openjdk-8-jdk
-  when: ansible_distribution == 'Debian'
+  when: (ansible_lsb.id | default(ansible_distribution)) | lower == "debian"
