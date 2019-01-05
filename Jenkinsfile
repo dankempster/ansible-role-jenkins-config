@@ -41,20 +41,20 @@ pipeline {
           }
         }
 
-        // stage('Raspbian Jessie') {
-        //   agent {
-        //     label 'raspberrypi_3'
-        //   }
-        //   steps {
-        //     sh '''
-        //       virtualenv virtenv
-        //       source virtenv/bin/activate
-        //       pip install --upgrade ansible molecule docker jmespath
+        stage('Raspbian Jessie') {
+          agent {
+            label 'raspberrypi_3'
+          }
+          steps {
+            sh '''
+              virtualenv virtenv
+              source virtenv/bin/activate
+              pip install --upgrade ansible molecule docker jmespath
           
-        //       molecule -e molecule/raspbian_jessie_env.yml test
-        //     '''
-        //   }
-        // }
+              molecule -e molecule/raspbian_jessie_env.yml test
+            '''
+          }
+        }
       }
     }
   }
