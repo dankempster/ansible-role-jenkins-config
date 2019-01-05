@@ -1,5 +1,13 @@
 ---
 
+- name: Import RedHat vars
+  include_vars: vars/redhat_package_vars.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Import Debian vars
+  include_vars: vars/debian_package_vars.yml
+  when: ansible_os_family == 'Debian'
+
 - name: Initialise
   include: initialise.yml
 

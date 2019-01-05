@@ -26,6 +26,23 @@ pipeline {
           }          
         }
 
+        stage('CentOS 7') {
+          agent {
+            label 'x86_64'
+          }
+          steps {
+            checkout scm
+
+            sh '''
+              virtualenv virtenv
+              source virtenv/bin/activate
+              pip install --upgrade ansible molecule docker jmespath
+
+              molecule -e molecule/centos7_env.yml test
+            '''
+          }          
+        }
+
         stage('Raspbian Stretch') {
           agent {
             label 'raspberrypi_3'
