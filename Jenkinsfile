@@ -45,8 +45,6 @@ pipeline {
             sh '''
               virtualenv virtenv
               source virtenv/bin/activate
-                
-              tput colors
 
               export TERM=xterm-256color
 
