@@ -22,9 +22,11 @@
   when: "'build-essential' not in jenkins_install_distro_packages"
 
 # neccassary for Raspberry Pis running Raspbian
-- name: Ensure libffi-dev package will be installed
+- name: Ensure package dev headers will be installed
   set_fact:
     jenkins_install_distro_packages: "{{ jenkins_install_distro_packages 
-      + ['libffi-dev']
+      + [item + '-dev']
       }}"
-  when: "'libffi-dev' not in jenkins_install_distro_packages"
+  when: "item not in jenkins_install_distro_packages"
+  with_items:
+    - libffi
