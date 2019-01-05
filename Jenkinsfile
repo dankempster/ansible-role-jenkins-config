@@ -20,7 +20,9 @@ pipeline {
               sh '''
                 virtualenv virtenv
                 source virtenv/bin/activate
-                
+
+                tput colors
+
                 export ANSIBLE_FORCE_COLOR=true
 
                 pip install --upgrade ansible molecule docker jmespath
