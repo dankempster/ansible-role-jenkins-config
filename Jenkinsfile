@@ -20,6 +20,10 @@ pipeline {
               sh '''
                 virtualenv virtenv
                 source virtenv/bin/activate
+                
+                tput colors
+
+                export TERM=xterm-256color
 
                 tput colors
 
@@ -41,6 +45,13 @@ pipeline {
             sh '''
               virtualenv virtenv
               source virtenv/bin/activate
+                
+              tput colors
+
+              export TERM=xterm-256color
+
+              tput colors
+              
               pip install --upgrade ansible molecule docker jmespath
           
               molecule -e molecule/raspbian_stretch_env.yml test
