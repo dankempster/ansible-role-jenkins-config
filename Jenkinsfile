@@ -20,6 +20,9 @@ pipeline {
               sh '''
                 virtualenv virtenv
                 source virtenv/bin/activate
+                
+                export ANSIBLE_FORCE_COLOR=true
+
                 pip install --upgrade ansible molecule docker jmespath
 
                 molecule -e molecule/debian9_env.yml test

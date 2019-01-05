@@ -33,5 +33,7 @@ scenario:
     - destroy
 verifier:
   name: testinfra
+  options:
+    color: 'yes'
   lint:
     name: flake8
