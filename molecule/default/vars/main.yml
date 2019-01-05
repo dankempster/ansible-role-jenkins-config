@@ -1,8 +1,4 @@
 ---
-jenkins_home: /opt/jenkins
-jenkins_hostname: jenkins
-jenkins_domain: ""
-
 jenkins_config_plugins: []
 
 jenkins_git_config_name: Dan Kempster
@@ -11,31 +7,31 @@ jenkins_git_installations:
   - name: Default
     home: git
 
-jenkins_github_enabled: true
+jenkins_github_enabled: false
 jenkins_github_token: SECRETGITHUBTOKEN
 
-jenkins_nodejs_installations:
-  - name: nodejs
-    version: 11.5.0
+# jenkins_nodejs_installations:
+#   - name: nodejs
+#     version: 11.5.0
 
-jenkins_ant_installations:
-  - name: local
-    home: ant
-  - name: ant11
-    version: 11.5.0
+# jenkins_ant_installations:
+#   - name: local
+#     home: ant
+#   - name: ant11
+#     version: 11.5.0
 
-jenkins_admin_username: ''
-jenkins_admin_password: ''
+# jenkins_admin_username: ''
+# jenkins_admin_password: ''
 
-jenkins_credentials_secret_text: 
-  - name: Eyes Only
-    username: me
-    secret: my-eyes-only-secret
-    id: com.github.eyes-only
+# jenkins_credentials_secret_text: 
+#   - name: Eyes Only
+#     username: me
+#     secret: my-eyes-only-secret
+#     id: com.github.eyes-only
 
-jenkins_credentials_ssh_private_keys: 
-  - name: Github
-    username: my-github-user
-    privatekey: my-super-secret-private-key
-    passphrase: secret
-    id: com.github.my-github-user.key
+# jenkins_credentials_ssh_private_keys: 
+#   - name: Github
+#     username: my-github-user
+#     privatekey: my-super-secret-private-key
+#     passphrase: secret
+#     id: com.github.my-github-user.key
