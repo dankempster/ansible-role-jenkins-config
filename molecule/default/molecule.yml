@@ -17,6 +17,8 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
+    options:
+      force-color: true
 scenario:
   name: default
   test_sequence:
