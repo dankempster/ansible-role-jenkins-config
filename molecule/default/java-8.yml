@@ -6,6 +6,18 @@
     - ansible_distribution == "Ubuntu"
     - ansible_distribution_version == "14.04"
 
+- name: ansible_lsb
+  debug:
+      var: ansible_lsb
+
+- name: ansible_distribution
+  debug:
+      var: ansible_distribution
+
+- name: ansible_distribution_release
+  debug:
+      var: ansible_distribution_release
+
 # Debian.
 - name: Enable Backports repository (Debian 8).
   apt_repository:
