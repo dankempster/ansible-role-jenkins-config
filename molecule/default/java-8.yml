@@ -29,10 +29,12 @@
     state: present
     filename: "{{ ansible_distribution_release }}_backports"
   when: ansible_distribution == "Debian"
+    and ansible_distribution_major_version == 8
 
 - name: Update apt cache.
   apt: update_cache=yes cache_valid_time=600
   when: ansible_os_family == 'Debian'
+    and ansible_distribution_major_version == 8
   changed_when: false
 
 # See: http://unix.stackexchange.com/a/342469
@@ -44,6 +46,7 @@
       - ca-certificates-java
     state: present
   when: ansible_distribution == "Debian"
+    and ansible_distribution_major_version == 8
 
 # Red Hat.
 - name: Set the java_packages variable (RedHat).
