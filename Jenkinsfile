@@ -16,13 +16,15 @@ pipeline {
           steps {
             checkout scm
 
-            sh '''
-              virtualenv virtenv
-              source virtenv/bin/activate
-              pip install --upgrade ansible molecule docker jmespath
+            ansiColor('xterm') {
+              sh '''
+                virtualenv virtenv
+                source virtenv/bin/activate
+                pip install --upgrade ansible molecule docker jmespath
 
-              molecule -e molecule/debian9_env.yml test
-            '''
+                molecule -e molecule/debian9_env.yml test
+              '''
+            }
           }          
         }
 
