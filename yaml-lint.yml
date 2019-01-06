@@ -10,3 +10,4 @@ ignore: |
   jenkins-home
   roles/geerlingguy*
   vars/secrets.yml
+  virtenv
