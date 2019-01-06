@@ -1,6 +1,6 @@
 ---
 
-- include: tools/git/client.yml
+- include: ../../tools/git/client.yml
 
 - name: Do we need to install the Git plugin?
   set_fact:
