@@ -1,7 +1,7 @@
 ---
 
 - name: Create directory to generate REST payloads in
-  file: 
+  file:
     state: directory
     path: "{{ playbook_dir }}/rest-payloads"
   delegate_to: localhost
@@ -24,7 +24,7 @@
         | default("")
         }}'
       executors: '{{
-        hostvars[node_name]["jenkins_node_executors"] 
+        hostvars[node_name]["jenkins_node_executors"]
         | default(1)
         }}'
       remote_fs: '{{
@@ -39,7 +39,7 @@
         hostvars[node_name]["jenkins_node_mode"]
         | default("NORMAL")
         }}'
-      
+
       # launcher
       workdir: '{{
         hostvars[node_name]["jenkins_node_workdir"]
@@ -56,7 +56,7 @@
       tunnel_through: '{{
         hostvars[node_name]["jenkins_node_tunnel_through"]
         | default("")
-        }}' 
+        }}'
       jvm_args: '{{
         hostvars[node_name]["jenkins_node_jvm_args"]
         | default("")
@@ -80,8 +80,8 @@
     url: '{{ jenkins_uri }}/crumbIssuer/api/json'
     user: "{{ jenkins_admin_username }}"
     password: "{{ jenkins_admin_password }}"
-    force_basic_auth: yes
-    return_content: yes
+    force_basic_auth: true
+    return_content: true
   register: jenkins_crumb
 
 - name: Register {{ node_name }} node
@@ -92,7 +92,7 @@
       &type=hudson.slaves.DumbSlave"
     user: "{{ jenkins_admin_username }}"
     password: "{{ jenkins_admin_password }}"
-    force_basic_auth: yes
+    force_basic_auth: true
     headers:
       Jenkins-Crumb: "{{ jenkins_crumb.json.crumb }}"
     body: |

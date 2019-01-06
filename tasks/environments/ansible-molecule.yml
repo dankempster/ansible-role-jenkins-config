@@ -5,21 +5,21 @@
 
 - name: Ensure molecule will be installed (via pip)
   set_fact:
-    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages 
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages
       + ['molecule']
       }}"
   when: "'molecule' not in jenkins_install_pip_packages"
 
 - name: Ensure ansible will be installed (via pip)
   set_fact:
-    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages 
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages
       + ['ansible']
       }}"
   when: "'ansible' not in jenkins_install_pip_packages"
 
 - name: Ensure docker will be installed (via pip)
   set_fact:
-    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages 
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages
       + ['docker']
       }}"
   when: "'docker' not in jenkins_install_pip_packages"

@@ -26,7 +26,7 @@
 
 - name: Ensure Job-DSL will be installed
   set_fact:
-    jenkins_config_plugins: "{{ jenkins_config_plugins 
+    jenkins_config_plugins: "{{ jenkins_config_plugins
       + [{'name':'job-dsl'}]
       }}"
   when: "jenkins_nodejs_installations

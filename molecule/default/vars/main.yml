@@ -23,13 +23,13 @@ jenkins_github_token: SECRETGITHUBTOKEN
 # jenkins_admin_username: ''
 # jenkins_admin_password: ''
 
-# jenkins_credentials_secret_text: 
+# jenkins_credentials_secret_text:
 #   - name: Eyes Only
 #     username: me
 #     secret: my-eyes-only-secret
 #     id: com.github.eyes-only
 
-# jenkins_credentials_ssh_private_keys: 
+# jenkins_credentials_ssh_private_keys:
 #   - name: Github
 #     username: my-github-user
 #     privatekey: my-super-secret-private-key

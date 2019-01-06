@@ -71,7 +71,8 @@
     group: "{{ item.owner }}"
   become: true
   with_items:
-    - { path: "{{ jenkins_home }}", owner: "{{ jenkins_user }}" }
+    - path: "{{ jenkins_home }}"
+      owner: "{{ jenkins_user }}"
 
 
 #

@@ -42,7 +42,8 @@
       or jenkins_farm_role == 'master'
     )
   with_items:
-    - { secret: "{{ jenkins_secret_key }}", path: secret.key }
+    - secret: "{{ jenkins_secret_key }}"
+      path: secret.key
 
 - name: Configure Jenkins
   template:

@@ -5,4 +5,4 @@
   with_items: "{{ groups['jenkins'] }}"
   loop_control:
     loop_var: node_name
-  when: hostvars[node_name]['jenkins_farm_role'] == 'slave' 
+  when: hostvars[node_name]['jenkins_farm_role'] == 'slave'
