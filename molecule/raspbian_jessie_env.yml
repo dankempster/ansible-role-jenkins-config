@@ -1,3 +1,3 @@
 ---
 MOLECULE_DISTRO: rasp_jessie
-MOLECULE_IMAGE: dankempster/raspbian-jessie-ansible
+MOLECULE_IMAGE: dankempster/jenkins-raspbian-jessie-ansible
