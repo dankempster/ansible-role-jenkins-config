@@ -9,6 +9,10 @@
       jenkins_config_plugins | json_query('[?name==`job-dsl`].name')
     ) | count == 0"
 
+- name: Admin password
+  debug:
+    var: jenkins_admin_password
+
 - name: Install Jenkins plugins using password.
   become: true
   jenkins_plugin:
