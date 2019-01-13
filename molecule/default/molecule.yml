@@ -36,6 +36,6 @@ scenario:
 verifier:
   name: testinfra
   options:
-    junit-xml: build/reports/testinfra-junit.xml
+    junit-xml: ../../build/reports/testinfra-default.junit.xml
   lint:
     name: flake8
