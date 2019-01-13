@@ -21,7 +21,7 @@ pipeline {
               source virtenv/bin/activate
               pip install --upgrade ansible molecule docker jmespath
 
-              molecule -e molecule/debian9_env.yml test
+              molecule -e ./molecule/debian9_env.yml test
             '''
           }          
         }
@@ -36,7 +36,7 @@ pipeline {
               source virtenv/bin/activate
               pip install --upgrade ansible molecule docker jmespath
           
-              molecule -e molecule/raspbian_stretch_env.yml test
+              molecule -e ./molecule/raspbian_stretch_env.yml test
             '''
           }
         }

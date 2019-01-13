@@ -13,10 +13,4 @@
     - role: geerlingguy.git
       become: true
 
-    - role: geerlingguy.java
-      become: true
-
-    - role: geerlingguy.jenkins
-      become: true
-
     - role: ../../../
