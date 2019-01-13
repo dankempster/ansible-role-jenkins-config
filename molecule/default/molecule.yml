@@ -31,9 +31,11 @@ scenario:
     - converge
     # - idempotence
     # - side_effect
-    # - verify
+    - verify
     - destroy
 verifier:
   name: testinfra
+  options:
+    junit-xml: ../../build/reports/testinfra-default.junit.xml
   lint:
     name: flake8
