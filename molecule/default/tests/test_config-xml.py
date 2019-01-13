@@ -11,6 +11,7 @@ host = testinfra.get_host('docker://' + os.environ['TARGET_HOST'])
 
 config = host.file("/var/lib/jenkins/config.xml")
 
+
 class MyTest(xmlunittest.XmlTestCase):
 
     def test_config_exists(self):

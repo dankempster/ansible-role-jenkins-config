@@ -13,6 +13,7 @@ def test_hosts_file(host):
     assert f.user == 'root'
     assert f.group == 'root'
 
+
 def test_jenkins_is_configured(host):
     f = host.file('/var/lib/jenkins/config.xml')
 
@@ -21,13 +22,17 @@ def test_jenkins_is_configured(host):
     assert f.group == 'jenkins'
     assert f.mode == 0644
 
+
 def test_jenkins_location_is_configured(host):
-    f = host.file('/var/lib/jenkins/jenkins.model.JenkinsLocationConfiguration.xml')
+    f = host.file(
+        '/var/lib/jenkins/jenkins.model.JenkinsLocationConfiguration.xml'
+    )
 
     assert f.exists
     assert f.user == 'jenkins'
     assert f.group == 'jenkins'
     assert f.mode == 0644
+
 
 def test_jenkins_CLI_is_configured(host):
     f = host.file('/var/lib/jenkins/jenkins.CLI.xml')
