@@ -1,13 +1,22 @@
 ---
 
-- include: ../../tools/git/client.yml
-
 - name: Do we need to install the Git plugin?
   set_fact:
     jenkins_config_plugins: "{{ jenkins_config_plugins
       + [{'name':'git'}]
       }}"
-  when: "jenkins_git_installations | count > 0
+  when: "'git' not in jenkins_config_plugins
     and (
       jenkins_config_plugins | json_query('[?name==`git`].name')
+    ) | count == 0"
+
+- name: Ensure the git-client plugin will be installed
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins | default([], true)
+      + [{'name':'git-client'}]
+      }}"
+  when: "'git-client' not in jenkins_config_plugins
+    and (
+      (jenkins_config_plugins | json_query('[?name==`git-client`].name'))
+      | default([], true)
     ) | count == 0"
