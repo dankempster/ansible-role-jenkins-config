@@ -37,5 +37,7 @@ verifier:
   name: testinfra
   options:
     junit-xml: ../../build/reports/testinfra-default.junit.xml
+  env:
+    TARGET_HOST: ${MOLECULE_DISTRO:-debian9}
   lint:
     name: flake8

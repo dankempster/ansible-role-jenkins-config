@@ -21,7 +21,7 @@ pipeline {
             sh '''
               virtualenv virtenv
               source virtenv/bin/activate
-              pip install --upgrade ansible molecule docker jmespath
+              pip install --upgrade ansible molecule docker jmespath xmlunittest
 
               molecule -e ./molecule/debian9_env.yml test
             '''
@@ -44,7 +44,7 @@ pipeline {
             sh '''
               virtualenv virtenv
               source virtenv/bin/activate
-              pip install --upgrade ansible molecule docker jmespath
+              pip install --upgrade ansible molecule docker jmespath xmlunittest
           
               molecule -e ./molecule/raspbian_stretch_env.yml test
             '''
