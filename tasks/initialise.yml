@@ -8,18 +8,12 @@
   register: adminpasswordfile
   no_log: true
   when: jenkins_admin_password_file != ""
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
 
 - name: Set Jenkins admin password fact.
   set_fact:
     jenkins_admin_password: "{{ adminpasswordfile['stdout']
       | default(jenkins_admin_password) }}"
   no_log: true
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 
 #
@@ -37,10 +31,6 @@
   become: true
   notify: restart jenkins
   when: item.secret | default(false, true) != false
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
   with_items:
     - secret: "{{ jenkins_secret_key }}"
       path: secret.key
@@ -55,8 +45,6 @@
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins location
   template:
@@ -68,8 +56,6 @@
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins CLI
   template:
@@ -81,8 +67,6 @@
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins Shell
   template:
@@ -94,17 +78,6 @@
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
-
-
-#
-#
-### FARM
-#
-- name: Set up a build farm
-  include: farm/initialise.yml
-  when: jenkins_farm_enabled
 
 
 #
@@ -112,16 +85,10 @@
 ### TOOLS
 #
 - include: tools/git/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - include: tools/ant/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - include: tools/nodejs/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 
 #
@@ -129,8 +96,6 @@
 ### INTEGRATIONS
 #
 - include: integrations/github/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 
 #
@@ -139,14 +104,6 @@
 #
 - include: environments/python.yml
   when: jenkins_env_python_enabled
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
 
 - include: environments/ansible-molecule.yml
   when: jenkins_env_molecule_enabled
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
