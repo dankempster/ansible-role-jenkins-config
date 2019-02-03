@@ -35,6 +35,7 @@
     ) | count == 0"
 
 - name: Install Jenkins plugins using password.
+  become: true
   jenkins_plugin:
     name: "{{ item.name | default(item) }}"
     jenkins_home: "{{ jenkins_home }}"
