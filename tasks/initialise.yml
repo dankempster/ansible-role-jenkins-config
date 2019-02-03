@@ -25,8 +25,8 @@
     dest: "{{ jenkins_home }}/{{ item.path }}"
     content: "{{ item.secret }}"
     mode: 0640
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     force: false
   become: true
   notify: restart jenkins
@@ -39,8 +39,8 @@
   template:
     src: templates/jenkins/config.xml.j2
     dest: "{{ jenkins_home }}/config.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
@@ -50,8 +50,8 @@
   template:
     src: templates/jenkins/location.xml.j2
     dest: "{{ jenkins_home }}/jenkins.model.JenkinsLocationConfiguration.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
@@ -61,8 +61,8 @@
   template:
     src: templates/jenkins/cli.xml.j2
     dest: "{{ jenkins_home }}/jenkins.CLI.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
@@ -72,8 +72,8 @@
   template:
     src: templates/jenkins/shell.xml.j2
     dest: "{{ jenkins_home }}/hudson.tasks.Shell.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true

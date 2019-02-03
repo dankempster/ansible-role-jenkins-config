@@ -4,16 +4,16 @@
   file:
     path: "{{ jenkins_home }}/updates"
     state: directory
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
   become: true
 
 - name: Download current plugin updates from Jenkins update site
   get_url:
     url: http://updates.jenkins-ci.org/update-center.json
     dest: "{{ jenkins_home }}/updates/default.json"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0440
   changed_when: false
   become: true
@@ -53,8 +53,8 @@
   template:
     src: "templates/core/job-dsl/security-config.xml.j2"
     dest: "{{ jenkins_home }}/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0440
   notify: restart jenkins
   become: true

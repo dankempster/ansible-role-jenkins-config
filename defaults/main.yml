@@ -39,9 +39,6 @@ jenkins_ant_installations: []
 jenkins_dsl_enabled: false
 jenkins_dsl_security: true
 
-jenkins_user: jenkins
-jenkins_owner: jenkins
-jenkins_group: jenkins
 # password for SSH user. Defaults to jenkins_admin_password when blank.
 jenkins_user_password: ""
 

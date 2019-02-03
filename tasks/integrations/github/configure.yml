@@ -3,8 +3,8 @@
   template:
     src: "templates/integration/github/config.xml.j2"
     dest: "{{ jenkins_home }}/github-plugin-configuration.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0440
   notify: restart jenkins
   become: true

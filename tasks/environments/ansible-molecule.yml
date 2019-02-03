@@ -27,6 +27,6 @@
 - name: Ensure Jenkins is in the docker group
   become: true
   user:
-    name: "{{ jenkins_user }}"
+    name: "{{ jenkins_process_user }}"
     group: docker
     append: true
