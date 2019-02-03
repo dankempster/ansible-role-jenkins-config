@@ -1,13 +1,12 @@
 ---
 - name: Converge
   hosts: all
+  become: true
   vars_files:
-    - vars/main.yml
+    - ../role-stubs/defaults_geerlingguy.jenkins.yml
 
   roles:
-    - role: ansible-role-jenkins-config
+    - role: geerlingguy.git
+      become: true
 
-  post_tasks:
-    - name: Check if Jenkins is running.
-      uri:
-        url: "http://127.0.0.1:8080/"
+    - role: ../../../

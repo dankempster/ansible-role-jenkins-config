@@ -1,7 +1,7 @@
 ---
 - name: Do we need to install the nodeJS plugin?
   set_fact:
-    jenkins_config_plugins: "{{ jenkins_config_plugins 
+    jenkins_config_plugins: "{{ jenkins_config_plugins
       + [{'name':'nodejs'}]
       }}"
   when: "jenkins_nodejs_installations

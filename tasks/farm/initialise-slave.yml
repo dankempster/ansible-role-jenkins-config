@@ -3,7 +3,10 @@
 - name: Ensure Jenkins user on slaves
   user:
     name: "{{ jenkins_user }}"
-    password: "{{ jenkins_user_password | default(jenkins_admin_password, true) }}"
+    password: "{{
+      jenkins_user_password
+      | default(jenkins_admin_password, true)
+      }}"
     home: "/home/{{ jenkins_user }}"
     shell: /bin/bash
   become: true
@@ -22,6 +25,8 @@
     owner: "{{ jenkins_user }}"
     group: "{{ jenkins_group }}"
   with_items:
-    - { name: .ssh/, mode: "0700" }
-    - { name: .ssh/authorized_keys, mode: "0644" }
+    - name: .ssh/
+      mode: "0700"
+    - name: .ssh/authorized_keys
+      mode: "0644"
   become: true

@@ -2,29 +2,32 @@
 
 - name: Ensure Python's virtual environment will be installed
   set_fact:
-    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages 
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages
       + ['virtualenv']
       }}"
   when: "'virtualenv' not in jenkins_install_pip_packages"
 
 - name: Ensure python-dev package will be installed
   set_fact:
-    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages 
+    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages
       + ['python-dev']
       }}"
   when: "'python-dev' not in jenkins_install_distro_packages"
 
 - name: Ensure build-essential package will be installed
   set_fact:
-    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages 
+    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages
       + ['build-essential']
       }}"
   when: "'build-essential' not in jenkins_install_distro_packages"
 
 # neccassary for Raspberry Pis running Raspbian
-- name: Ensure libffi-dev package will be installed
+- name: Ensure package dev headers will be installed
   set_fact:
-    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages 
-      + ['libffi-dev']
+    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages
+      + [item + '-dev']
       }}"
-  when: "'libffi-dev' not in jenkins_install_distro_packages"
+  when: "item not in jenkins_install_distro_packages"
+  with_items:
+    - libffi
+    - libssl

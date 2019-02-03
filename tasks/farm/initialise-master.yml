@@ -71,7 +71,8 @@
     group: "{{ item.owner }}"
   become: true
   with_items:
-    - { path: "{{ jenkins_home }}", owner: "{{ jenkins_user }}" }
+    - path: "{{ jenkins_home }}"
+      owner: "{{ jenkins_user }}"
 
 
 #
@@ -99,7 +100,7 @@
 ### JENKINS SSH CREDENTIAL
 #
 - name: Retrieve private key
-  shell: cat {{ jenkins_home }}/.ssh/id_rsa
+  command: cat {{ jenkins_home }}/.ssh/id_rsa
   register: jenkins_private_key
   changed_when: false
   become: true

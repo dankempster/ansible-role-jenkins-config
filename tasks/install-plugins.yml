@@ -26,7 +26,7 @@
 
 - name: Ensure Job-DSL will be installed
   set_fact:
-    jenkins_config_plugins: "{{ jenkins_config_plugins 
+    jenkins_config_plugins: "{{ jenkins_config_plugins
       + [{'name':'job-dsl'}]
       }}"
   when: "jenkins_nodejs_installations
@@ -60,7 +60,8 @@
   become: true
 
 # ensure Jenkins is restarted if need be, by flushing the handlers
-- meta: flush_handlers
+- name: "Meta: Flush handlers"
+  meta: flush_handlers
 
 # wait for Jenkins to be available again
 - name: Wait for Jenkins to start up before proceeding.
