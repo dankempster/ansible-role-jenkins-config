@@ -1,41 +1,15 @@
 ---
 
-#
-#
-### NO FARM
-#
 - name: Install distro packages
   package:
     name: "{{ jenkins_install_distro_packages }}"
     state: present
   become: true
-  when: not jenkins_farm_enabled
-    and jenkins_install_distro_packages | count > 0
+  when: jenkins_install_distro_packages | count > 0
 
 - name: Install pip packages
   pip:
     name: "{{ jenkins_install_pip_packages }}"
     state: present
   become: true
-  when: not jenkins_farm_enabled
-    and jenkins_install_pip_packages | count > 0
-
-#
-#
-### FARM
-#
-- name: Install distro packages on all nodes
-  package:
-    name: "{{ hostvars[jenkins_farm_master]['jenkins_install_distro_packages'] }}"
-    state: present
-  become: true
-  when: jenkins_farm_enabled
-    and jenkins_install_distro_packages | count > 0
-
-- name: Install pip packages on all nodes
-  pip:
-    name: "{{ hostvars[jenkins_farm_master]['jenkins_install_pip_packages'] }}"
-    state: present
-  become: true
-  when: jenkins_farm_enabled
-    and jenkins_install_pip_packages | count > 0
+  when: jenkins_install_pip_packages | count > 0

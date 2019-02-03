@@ -1,9 +1,0 @@
----
-
-- name: Initialise the Master node
-  include: initialise-master.yml
-  when: jenkins_farm_role == 'master'
-
-- name: Initialise the Slave nodes
-  include: initialise-slave.yml
-  when: jenkins_farm_role == 'slave'

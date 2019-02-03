@@ -83,10 +83,3 @@ jenkins_security_disable_remember_me: false
 
 jenkins_install_distro_packages: []
 jenkins_install_pip_packages: []
-
-# name of master node for this farm
-jenkins_farm_enabled: false
-jenkins_farm_master: jenkins_master
-jenkins_farm_role: "{{
-  (inventory_hostname == jenkins_farm_master) | ternary('master', 'slave')
-  }}"
