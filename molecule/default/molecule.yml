@@ -9,7 +9,7 @@ lint:
     config-file: yaml-lint.yml
 platforms:
   - name: "${MOLECULE_DISTRO:-debian9}"
-    image: "${MOLECULE_IMAGE:-dankempster/jenkins-ansible:latest}"
+    image: "${MOLECULE_IMAGE:-dankempster/jenkins-ansible:0.3}"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
