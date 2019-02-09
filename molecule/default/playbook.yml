@@ -2,11 +2,9 @@
 - name: Converge
   hosts: all
   become: true
-  vars_files:
-    - ../role-stubs/defaults_geerlingguy.jenkins.yml
 
   roles:
-    - role: geerlingguy.git
+    - role: geerlingguy.jenkins
       become: true
 
     - role: ../../../
