@@ -18,8 +18,6 @@ pipeline {
             label 'x86_64'
           }
           steps {
-            checkout scm
-
             withAnt(installation: 'System') {
               sh "ant virtenv"
             }
