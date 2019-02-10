@@ -4,6 +4,10 @@ pipeline {
 
   agent none
 
+  environment {
+    ANT_ARGS = '-logger org.apache.tools.ant.listener.AnsiColorLogger'
+  }
+
   stages {
 
     stage ('Test Distros') {
@@ -16,12 +20,12 @@ pipeline {
           steps {
             checkout scm
 
-            sh '[ -d build/reports ] || mkdir -p build/reports'
+            withAnt(installation: 'System') {
+              sh "ant virtenv"
+            }
 
             sh '''
-              virtualenv virtenv
               source virtenv/bin/activate
-              pip install --upgrade ansible molecule docker jmespath xmlunittest
 
               molecule -e ./molecule/debian9_env.yml test
             '''
@@ -38,14 +42,13 @@ pipeline {
             label 'raspberrypi_3'
           }
           steps {
-
-            sh '[ -d build/reports ] || mkdir -p build/reports'
+            withAnt(installation: 'System') {
+              sh "ant virtenv"
+            }
 
             sh '''
-              virtualenv virtenv
               source virtenv/bin/activate
-              pip install --upgrade ansible molecule docker jmespath xmlunittest
-          
+
               molecule -e ./molecule/raspbian_stretch_env.yml test
             '''
           }

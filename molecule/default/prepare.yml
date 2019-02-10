@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: Update
+      apt:
+        update_cache: true
+        upgrade: true
+        only_upgrade: true
+        install_recommends: false
