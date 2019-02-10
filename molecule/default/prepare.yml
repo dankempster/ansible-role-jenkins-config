@@ -2,9 +2,26 @@
 - name: Converge
   hosts: all
   become: true
+  vars_files:
+    - ../role-stubs/defaults_geerlingguy.jenkins.yml
+    
   tasks:
     - name: Update
       apt:
         update_cache: true
         upgrade: false
         install_recommends: false
+
+    #
+    ## Geerlingguy.jenkins
+    - name: Get Jenkins admin password from file.
+      slurp:
+        src: "{{ jenkins_admin_password_file }}"
+      register: adminpasswordfile
+      no_log: true
+      when: jenkins_admin_password_file != ""
+    - name: Set Jenkins admin password fact.
+      set_fact:
+        jenkins_admin_password: "{{ adminpasswordfile['stdout']
+          | default(jenkins_admin_password) }}"
+      no_log: true

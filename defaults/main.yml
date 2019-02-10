@@ -2,8 +2,6 @@
 jenkins_config_plugins: []
 jenkins_config_shell: /bin/bash
 
-jenkins_secret_key: ~
-
 jenkins_cli_enabled: true
 
 jenkins_git_installations: []
