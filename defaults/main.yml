@@ -23,8 +23,7 @@ jenkins_github_servers:
     credentials_id: "{{ jenkins_github_token_id }}"
     client_cache_size: 20
 
-jenkins_env_python_enabled: false
-jenkins_env_molecule_enabled: false
+jenkins_python_enabled: false
 
 jenkins_credentials_user_pass: []
 jenkins_credentials_ssh_private_keys: []
