@@ -86,6 +86,9 @@
 #
 - include: tools/git/initialise.yml
 
+- include: tools/python/initialise.yml
+  when: jenkins_python_enabled
+
 - include: tools/ant/initialise.yml
 
 - include: tools/nodejs/initialise.yml
@@ -96,11 +99,3 @@
 ### INTEGRATIONS
 #
 - include: integrations/github/initialise.yml
-
-
-#
-#
-### ENVIRONMENTS
-#
-- include: environments/python.yml
-  when: jenkins_env_python_enabled
