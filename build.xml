@@ -1,0 +1,78 @@
+<project name="ansible-role-jenkins-config" basedir=".">
+  <!-- Sets properties for macosx/windows/linux depending on current system -->
+  <condition property="macosx">
+    <os family="mac" />
+  </condition>
+  <condition property="linux">
+    <os family="unix" />
+  </condition>
+  <!-- <condition property="arm">
+    <os family="unix" arch="arm" />
+  </condition> -->
+  <!-- <condition property="linux32">
+    <os family="unix" arch="i386" />
+  </condition>
+  <condition property="linux64">
+    <os family="unix" arch="amd64" />
+  </condition> -->
+
+  <property name="distro" value="debian9" />
+
+  <property name="dir.bin" location="bin"/>
+  <property name="dir.reports" location="build/reports" />
+  <property name="dir.src" location="." />
+
+  
+  <target name="converge" depends="virtenv">
+    <exec executable="virtenv/bin/molecule">
+      <arg line="-e molecule/${distro}_env.yml" />
+      <arg value="converge" />
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="${dir.reports}" />
+  </target>
+  
+  <target name="destroy" depends="virtenv">
+    <exec executable="virtenv/bin/molecule">
+      <arg line="-e molecule/${distro}_env.yml" />
+      <arg value="destroy" />
+    </exec>
+  </target>
+
+  <target name="lint" depends="virtenv">
+    <exec executable="virtenv/bin/molecule">
+      <arg value="lint" />
+    </exec>
+  </target>
+  
+  <target name="reset" depends="clean, destroy">
+    <delete dir="virtenv" />
+  </target>
+  
+  <target name="test" depends="lint, converge, verify, destroy" />
+
+  <target name="verify" depends="clean, virtenv">
+    <mkdir dir="${dir.reports}" />
+    <exec executable="virtenv/bin/molecule">
+      <arg line="-e molecule/${distro}_env.yml" />
+      <arg value="verify" />
+    </exec>
+  </target>
+
+  <target name="virtenv">
+    <exec executable="virtualenv">
+      <arg value="virtenv" />
+    </exec>
+    <exec executable="virtenv/bin/pip">
+      <arg value="install" />
+      <arg value="--upgrade" />
+      <arg value="ansible" />
+      <arg value="molecule" />
+      <arg value="docker" />
+      <arg value="jmespath" />
+      <arg value="xmlunittest" />
+    </exec>
+  </target>
+</project>
