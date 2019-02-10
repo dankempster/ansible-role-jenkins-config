@@ -24,11 +24,13 @@ pipeline {
               sh "ant virtenv"
             }
 
-            sh '''
+            sh """
               source virtenv/bin/activate
 
+              export ARJC_TESTENV_NAME="${env.BUILD_NUMBER}_debian9"
+
               molecule -e ./molecule/debian9_env.yml test
-            '''
+            """
           }
           post {
             always {
@@ -46,11 +48,13 @@ pipeline {
               sh "ant virtenv"
             }
 
-            sh '''
+            sh """
               source virtenv/bin/activate
 
+              export ARJC_TESTENV_NAME="${env.BUILD_NUMBER}_raspbian"
+
               molecule -e ./molecule/raspbian_stretch_env.yml test
-            '''
+            """
           }
           post {
             always {

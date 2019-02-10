@@ -1,3 +1,2 @@
 ---
-MOLECULE_DISTRO: rasp_stretch
-MOLECULE_IMAGE: "dankempster/jenkins-raspbian-stretch-ansible:0.1"
+ARJC_TESTENV_IMAGE: "dankempster/jenkins-raspbian-stretch-ansible:0.1"

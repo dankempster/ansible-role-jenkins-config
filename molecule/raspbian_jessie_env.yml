@@ -1,3 +1,2 @@
 ---
-MOLECULE_DISTRO: rasp_jessie
-MOLECULE_IMAGE: dankempster/jenkins-raspbian-jessie-ansible
+ARJC_TESTENV_IMAGE: dankempster/jenkins-raspbian-jessie-ansible

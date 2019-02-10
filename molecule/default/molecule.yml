@@ -8,12 +8,12 @@ lint:
   options:
     config-file: yaml-lint.yml
 platforms:
-  - name: "${MOLECULE_DISTRO:-debian9}"
-    image: "${MOLECULE_IMAGE:-dankempster/jenkins-ansible:0.3}"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+  - name: "${ARJC_TESTENV_NAME:-debian9}"
+    image: "${ARJC_TESTENV_IMAGE:-dankempster/jenkins-ansible:0.3}"
+    command: ${ARJC_TESTENV_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
+    privileged: ${ARJC_TESTENV_PRIVILEGED:-true}
     pre_build_image: true
 provisioner:
   name: ansible
@@ -38,6 +38,6 @@ verifier:
   options:
     junit-xml: ../../build/reports/testinfra-default.junit.xml
   env:
-    TARGET_HOST: ${MOLECULE_DISTRO:-debian9}
+    TARGET_HOST: "${ARJC_TESTENV_NAME:-debian9}"
   lint:
     name: flake8

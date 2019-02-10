@@ -21,10 +21,13 @@
   <property name="dir.bin" location="bin"/>
   <property name="dir.reports" location="build/reports" />
   <property name="dir.src" location="." />
-
+  
+  <property name="testenv.name" location="${distro}" />
+  <property name="testenv.image" location="dankempster/jenkins-ansible:0.3" />
   
   <target name="converge" depends="virtenv">
     <exec executable="virtenv/bin/molecule">
+      <env key="ARJC_TESTENV_NAME" value="${distro}" />
       <arg line="-e molecule/${distro}_env.yml" />
       <arg value="converge" />
     </exec>
@@ -36,6 +39,7 @@
   
   <target name="destroy" depends="virtenv">
     <exec executable="virtenv/bin/molecule">
+      <env key="ARJC_TESTENV_NAME" value="${distro}" />
       <arg line="-e molecule/${distro}_env.yml" />
       <arg value="destroy" />
     </exec>
@@ -43,6 +47,8 @@
 
   <target name="lint" depends="virtenv">
     <exec executable="virtenv/bin/molecule">
+      <env key="ARJC_TESTENV_NAME" value="${distro}" />
+      <arg line="-e molecule/${distro}_env.yml" />
       <arg value="lint" />
     </exec>
   </target>
@@ -56,6 +62,7 @@
   <target name="verify" depends="clean, virtenv">
     <mkdir dir="${dir.reports}" />
     <exec executable="virtenv/bin/molecule">
+      <env key="ARJC_TESTENV_NAME" value="${distro}" />
       <arg line="-e molecule/${distro}_env.yml" />
       <arg value="verify" />
     </exec>
