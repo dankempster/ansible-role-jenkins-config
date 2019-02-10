@@ -25,3 +25,27 @@
         jenkins_admin_password: "{{ adminpasswordfile['stdout']
           | default(jenkins_admin_password) }}"
       no_log: true
+    # Update Jenkins so that plugin updates don't fail.
+    - name: Create update directory
+      file:
+        path: "{{ jenkins_home }}/updates"
+        state: directory
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+      become: true
+
+    - name: Download current plugin updates from Jenkins update site
+      get_url:
+        url: http://updates.jenkins-ci.org/update-center.json
+        dest: "{{ jenkins_home }}/updates/default.json"
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+        mode: 0440
+      changed_when: false
+      become: true
+
+    - name: Remove first and last line from json file
+      replace:
+        path: "{{ jenkins_home }}/updates/default.json"
+        regexp: "1d;$d"
+      become: true
