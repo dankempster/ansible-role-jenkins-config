@@ -1,2 +1,0 @@
----
-ARJC_TESTENV_IMAGE: "dankempster/jenkins-raspbian-stretch-ansible:0.1"

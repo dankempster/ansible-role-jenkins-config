@@ -36,7 +36,7 @@ scenario:
 verifier:
   name: testinfra
   options:
-    junit-xml: ../../build/reports/testinfra-default.junit.xml
+    junit-xml: ${ARJC_BUILD_REPORTS:-../../build/reports}/${ARJC_TESTENV_NAME:-debian9}-testinfra-default.junit.xml
   env:
     TARGET_HOST: "${ARJC_TESTENV_NAME:-debian9}"
   lint:

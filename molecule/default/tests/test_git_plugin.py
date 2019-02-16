@@ -9,7 +9,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_git_plugin_is_installed(host):
-    f = host.file('/var/lib/jenkins/plugins/git.jpi')
+    f = host.file('/var/lib/jenkins/plugins/git-client.jpi')
 
     assert f.exists
 

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source virtenv/bin/activate
+
+molecule $@
