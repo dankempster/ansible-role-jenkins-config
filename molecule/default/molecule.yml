@@ -9,7 +9,7 @@ lint:
     config-file: yaml-lint.yml
 platforms:
   - name: "${ARJC_TESTENV_NAME:-debian9}"
-    image: "${ARJC_TESTENV_IMAGE:-dankempster/jenkins-ansible:0.3}"
+    image: "${ARJC_TESTENV_IMAGE:-dankempster/debian-jenkins-ansible:9-0.4}"
     command: ${ARJC_TESTENV_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -36,7 +36,7 @@ scenario:
 verifier:
   name: testinfra
   options:
-    junit-xml: ../../build/reports/testinfra-default.junit.xml
+    junit-xml: ${ARJC_BUILD_REPORTS:-../../build/reports}/${ARJC_TESTENV_NAME:-debian9}-testinfra-default.junit.xml
   env:
     TARGET_HOST: "${ARJC_TESTENV_NAME:-debian9}"
   lint:

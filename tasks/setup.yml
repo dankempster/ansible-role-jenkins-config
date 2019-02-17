@@ -8,7 +8,6 @@
 
 - name: Manage Git tools
   include: tools/git/configure.yml
-  when: jenkins_git_installations
 
 - name: Manage Apache ant tools
   include: tools/ant/configure.yml

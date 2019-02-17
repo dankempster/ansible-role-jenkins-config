@@ -1,78 +1,172 @@
 <project name="ansible-role-jenkins-config" basedir=".">
   <!-- Sets properties for macosx/windows/linux depending on current system -->
-  <condition property="macosx">
+  <condition property="macos">
+    <and>
     <os family="mac" />
+      <not>
+        <os family="unix" />
+      </not>
+    </and>
   </condition>
-  <condition property="linux">
-    <os family="unix" />
+  <condition property="linux_x86">
+    <and>
+      <os family="unix" />
+      <not>
+        <os family="mac"/>
+      </not>
+      <not>
+        <os arch="arm"/>
+      </not>
+    </and>
   </condition>
-  <!-- <condition property="arm">
+  <condition property="linux_arm">
     <os family="unix" arch="arm" />
-  </condition> -->
-  <!-- <condition property="linux32">
-    <os family="unix" arch="i386" />
   </condition>
-  <condition property="linux64">
-    <os family="unix" arch="amd64" />
-  </condition> -->
-
-  <property name="distro" value="debian9" />
 
   <property name="dir.bin" location="bin"/>
-  <property name="dir.reports" location="build/reports" />
+  <property name="dir.build" location="build" />
+  <property name="dir.reports" location="${dir.build}/reports" />
   <property name="dir.src" location="." />
+  <property name="dir.temp" location="${dir.build}/tmp" />
   
-  <property name="testenv.name" location="${distro}" />
-  <property name="testenv.image" location="dankempster/jenkins-ansible:0.3" />
+  <condition property="molecule.image"
+    value="dankempster/raspbian-jenkins-ansible:stretch-0.4"
+    else="dankempster/debian-jenkins-ansible:9-0.4"
+  >
+    <os family="unix" arch="arm" />
+  </condition>
+  <condition property="molecule.name"
+    value="raspbian-stretch"
+    else="debian-9"
+  >
+    <os family="unix" arch="arm" />
+  </condition>
   
-  <target name="converge" depends="virtenv">
-    <exec executable="virtenv/bin/molecule">
-      <env key="ARJC_TESTENV_NAME" value="${distro}" />
-      <arg line="-e molecule/${distro}_env.yml" />
+
+  <!-- #####################
+    == Create a D
+  -->
+  <target name="compile"
+    depends="virtenv"
+    description="Run the role against a docker container target. The container remains running after the fact."
+  >
+    <echo message="TestEnv: ${molecule.image}"/>
+    <mkdir dir="${dir.temp}" />
+    <exec executable="bin/molecule-ci" failonerror="true">
+      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="ANSIBLE_FORCE_COLOR" value="true" />
+      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
+      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
+      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="converge" />
     </exec>
   </target>
 
-  <target name="clean">
+
+  <!-- #####################
+    == Clean build artifacts
+  -->
+  <target name="clean"
+    description="Clean build artifacts (destructive)"
+  >
     <delete dir="${dir.reports}" />
+    <delete dir="${dir.temp}" />
   </target>
   
-  <target name="destroy" depends="virtenv">
-    <exec executable="virtenv/bin/molecule">
-      <env key="ARJC_TESTENV_NAME" value="${distro}" />
-      <arg line="-e molecule/${distro}_env.yml" />
+  <target name="clean-test" depends="destroy, test" />
+  
+  <target name="destroy"
+    depends="prepare, virtenv"
+  >
+    <mkdir dir="${dir.temp}" />
+    <exec executable="bin/molecule-ci" failonerror="true">
+      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="ANSIBLE_FORCE_COLOR" value="true" />
+      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
+      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
+      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="destroy" />
     </exec>
   </target>
 
-  <target name="lint" depends="virtenv">
-    <exec executable="virtenv/bin/molecule">
-      <env key="ARJC_TESTENV_NAME" value="${distro}" />
-      <arg line="-e molecule/${distro}_env.yml" />
+
+  <!-- #####################
+    == Lint the project
+  -->
+  <target name="lint"
+    depends="prepare, virtenv"
+    description="Lint the project"
+  >
+    <mkdir dir="${dir.temp}" />
+    <exec executable="bin/molecule-ci" failonerror="false">
+      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="ANSIBLE_FORCE_COLOR" value="true" />
+      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
+      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
+      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="lint" />
     </exec>
   </target>
+
+  <target name="prepare">
+    <mkdir dir="${dir.build}"/>
+    <mkdir dir="${dir.temp}"/>
+    <mkdir dir="${dir.reports}"/>
+  </target>
   
-  <target name="reset" depends="clean, destroy">
+  <target name="reset"
+    depends="clean, destroy"
+    description="Reset the workspace (destructive)"
+  >
     <delete dir="virtenv" />
   </target>
   
-  <target name="test" depends="lint, converge, verify, destroy" />
 
-  <target name="verify" depends="clean, virtenv">
+  <!-- #####################
+    == Run all the tests
+  -->
+  <target name="test"
+    depends="lint, test-molecule"
+    description="Run everything"
+  />
+  <target name="test-ci"
+    depends="test, destroy"
+    description="Sames as 'test', but destroys the test comtaier(s) afterwards."
+  />
+  <target name="test-molecule"
+    depends="compile, verify"
+    description="Run the molecule tests"
+  />
+
+
+  <!-- ##########################
+    == Run tests without building
+  -->
+  <target name="verify"
+    depends="clean, prepare, virtenv"
+    description="Run all the tests against the existing build"
+  >
     <mkdir dir="${dir.reports}" />
-    <exec executable="virtenv/bin/molecule">
-      <env key="ARJC_TESTENV_NAME" value="${distro}" />
-      <arg line="-e molecule/${distro}_env.yml" />
+    <mkdir dir="${dir.temp}" />
+    <exec executable="bin/molecule-ci" failonerror="true">
+      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="ANSIBLE_FORCE_COLOR" value="true" />
+      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
+      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
+      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="verify" />
     </exec>
   </target>
 
+
+  <!-- ##########################
+    == Set up a python VirtualEnv
+  -->
   <target name="virtenv">
-    <exec executable="virtualenv">
+    <exec executable="virtualenv" failonerror="true">
       <arg value="virtenv" />
     </exec>
-    <exec executable="virtenv/bin/pip">
+    <exec executable="virtenv/bin/pip" failonerror="true">
       <arg value="install" />
       <arg value="--upgrade" />
       <arg value="ansible" />

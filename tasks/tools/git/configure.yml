@@ -1,14 +1,14 @@
 ---
 - name: Ensure Git SCM configuration file
   template:
-    src: "templates/tools/git/scm.xml.j2"
+    src: "templates/tools/git/git-scm.xml.j2"
     dest: "{{ jenkins_home }}/hudson.plugins.git.GitSCM.xml"
   notify: restart jenkins
   become: true
 
 - name: Ensure Git tool configuration file
   template:
-    src: "templates/tools/git/config.xml.j2"
+    src: "templates/tools/git/git-tool.xml.j2"
     dest: "{{ jenkins_home }}/hudson.plugins.git.GitTool.xml"
   notify: restart jenkins
   become: true
