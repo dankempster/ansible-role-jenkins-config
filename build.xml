@@ -27,7 +27,7 @@
   <property name="dir.build" location="build" />
   <property name="dir.reports" location="${dir.build}/reports" />
   <property name="dir.src" location="." />
-  <property name="dir.temp" location="${dir.build}/tmp" />
+  <property name="dir.tmp" location="${dir.build}/tmp" />
   
   <condition property="molecule.image"
     value="dankempster/raspbian-jenkins-ansible:stretch-0.4"
@@ -51,9 +51,9 @@
     description="Run the role against a docker container target. The container remains running after the fact."
   >
     <echo message="TestEnv: ${molecule.image}"/>
-    <mkdir dir="${dir.temp}" />
+    <mkdir dir="${dir.tmp}" />
     <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="TMPDIR" value="${dir.tmp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
       <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
       <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
@@ -70,7 +70,7 @@
     description="Clean build artifacts (destructive)"
   >
     <delete dir="${dir.reports}" />
-    <delete dir="${dir.temp}" />
+    <delete dir="${dir.tmp}" />
   </target>
   
   <target name="clean-test" depends="destroy, test" />
@@ -78,9 +78,9 @@
   <target name="destroy"
     depends="prepare, virtenv"
   >
-    <mkdir dir="${dir.temp}" />
+    <mkdir dir="${dir.tmp}" />
     <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="TMPDIR" value="${dir.tmp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
       <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
       <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
@@ -97,9 +97,9 @@
     depends="prepare, virtenv"
     description="Lint the project"
   >
-    <mkdir dir="${dir.temp}" />
+    <mkdir dir="${dir.tmp}" />
     <exec executable="bin/molecule-ci" failonerror="false">
-      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="TMPDIR" value="${dir.tmp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
       <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
       <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
@@ -110,7 +110,7 @@
 
   <target name="prepare">
     <mkdir dir="${dir.build}"/>
-    <mkdir dir="${dir.temp}"/>
+    <mkdir dir="${dir.tmp}"/>
     <mkdir dir="${dir.reports}"/>
   </target>
   
@@ -147,9 +147,9 @@
     description="Run all the tests against the existing build"
   >
     <mkdir dir="${dir.reports}" />
-    <mkdir dir="${dir.temp}" />
+    <mkdir dir="${dir.tmp}" />
     <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="TMPDIR" value="${dir.tmp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
       <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
       <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
