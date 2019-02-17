@@ -6,8 +6,8 @@ def BASE_NAME = "${SAFE_JOB_NAME}${env.BUILD_NUMBER}"
 def DISTRO_RASPBIAN_STRETCH = "${BASE_NAME}_rpi_stretch"
 def DISTRO_DEBIAN_9 = "${BASE_NAME}_debian_9"
 
-def MOLECULE_NAME_RASPBIAN_STRETCH = DISTRO_RASPBIAN_STRETCH.reverse().take(30).reverse()
-def MOLECULE_NAME_DEBIAN_9 = DISTRO_DEBIAN_9.reverse().take(30).reverse()
+def MOLECULE_NAME_RASPBIAN_STRETCH = DISTRO_RASPBIAN_STRETCH.reverse().take(30).reverse().replaceAll("^[^a-zA-Z0-9]+", "")
+def MOLECULE_NAME_DEBIAN_9 = DISTRO_DEBIAN_9.reverse().take(30).reverse().replaceAll("^[^a-zA-Z0-9]+", "")
 
 pipeline {
 
@@ -51,13 +51,15 @@ pipeline {
           }
 
           post {
-            always {
-              junit 'build/reports/**/*.xml'
-            }
-            cleanup {
-              withAnt(installation: 'System') {
-                sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy"
+            failure {
+              script {
+                withAnt(installation: 'System') {
+                  sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy-safe"
+                }
               }
+            }
+            always {
+              junit 'build/**/reports/**/*.xml'
             }
           }
         }
@@ -75,13 +77,15 @@ pipeline {
           }
 
           post {
-            always {
-              junit 'build/reports/**/*.xml'
-            }
-            cleanup {
-              withAnt(installation: 'System') {
-                sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy"
+            failure {
+              script {
+                withAnt(installation: 'System') {
+                  sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy-safe"
+                }
               }
+            }
+            always {
+              junit 'build/**/reports/**/*.xml'
             }
           }
         }
