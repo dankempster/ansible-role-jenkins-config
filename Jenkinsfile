@@ -6,8 +6,8 @@ def BASE_NAME = "${SAFE_JOB_NAME}${env.BUILD_NUMBER}"
 def DISTRO_RASPBIAN_STRETCH = "${BASE_NAME}_rpi_stretch"
 def DISTRO_DEBIAN_9 = "${BASE_NAME}_debian_9"
 
-def MOLECULE_NAME_RASPBIAN_STRETCH = DISTRO_RASPBIAN_STRETCH.reverse().take(30).reverse()
-def MOLECULE_NAME_DEBIAN_9 = DISTRO_DEBIAN_9.reverse().take(30).reverse()
+def MOLECULE_NAME_RASPBIAN_STRETCH = DISTRO_RASPBIAN_STRETCH.reverse().take(30).reverse().replaceAll("^[^a-zA-Z0-9]+", "")
+def MOLECULE_NAME_DEBIAN_9 = DISTRO_DEBIAN_9.reverse().take(30).reverse().replaceAll("^[^a-zA-Z0-9]+", "")
 
 pipeline {
 
