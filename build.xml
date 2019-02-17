@@ -55,9 +55,9 @@
     <exec executable="bin/molecule-ci" failonerror="true">
       <env key="TMPDIR" value="${dir.temp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
-      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
-      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
+      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
+      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
+      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="converge" />
     </exec>
   </target>
@@ -82,9 +82,9 @@
     <exec executable="bin/molecule-ci" failonerror="true">
       <env key="TMPDIR" value="${dir.temp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
-      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
-      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
+      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
+      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
+      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="destroy" />
     </exec>
   </target>
@@ -101,9 +101,9 @@
     <exec executable="bin/molecule-ci" failonerror="false">
       <env key="TMPDIR" value="${dir.temp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
-      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
-      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
+      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
+      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
+      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="lint" />
     </exec>
   </target>
@@ -151,9 +151,9 @@
     <exec executable="bin/molecule-ci" failonerror="true">
       <env key="TMPDIR" value="${dir.temp}" />
       <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="ARJC_TESTENV_NAME" value="${molecule.name}" />
-      <env key="ARJC_TESTENV_IMAGE" value="${molecule.image}" />
-      <env key="ARJC_BUILD_REPORTS" value="${dir.reports}" />
+      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
+      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
+      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
       <arg value="verify" />
     </exec>
   </target>
