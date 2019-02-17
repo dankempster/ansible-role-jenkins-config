@@ -30,8 +30,8 @@
   <property name="dir.temp" location="${dir.build}/tmp" />
   
   <condition property="molecule.image"
-    value="dankempster/jenkins-ansible-raspbian-stretch:0.3"
-    else="dankempster/jenkins-ansible:0.3"
+    value="dankempster/raspbian-jenkins-ansible:stretch-0.4"
+    else="dankempster/debian-jenkins-ansible:9-0.4"
   >
     <os family="unix" arch="arm" />
   </condition>
