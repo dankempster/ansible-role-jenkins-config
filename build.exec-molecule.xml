@@ -1,0 +1,58 @@
+<project name="ansible-role-jenkins-config" basedir=".">
+  <condition property="build.distro" value="raspbian" else="debian">
+    <os family="unix" arch="arm" />
+  </condition>
+  <condition property="build.distro.version" value="stretch" else="9">
+    <os family="unix" arch="arm" />
+  </condition>
+  
+  <property name="dir.build" location="build/${build.distro}-${build.distro.version}" />
+  <property name="dir.reports" location="${dir.build}/reports" />
+  <property name="dir.tmp" location="${dir.build}/tmp/" />
+  
+  <property name="molecule.failonerror" value="true" />
+  <property name="molecule.image" value="" />
+  <property name="molecule.name" value="${build.distro}-${build.distro.version}" />
+  <property name="molecule.suite" value="default" />
+
+  <target name="-exec-molecule-converge">
+    <echo message="Suite: ${molecule.suite}" />
+    <antcall target="-exec-molecule">
+      <param name="moleculeCommand" value="converge"/>
+    </antcall>
+  </target>
+  <target name="-exec-molecule-destroy">
+    <echo message="Suite: ${molecule.suite}" />
+    <antcall target="-exec-molecule">
+      <param name="moleculeCommand" value="destroy"/>
+    </antcall>
+  </target>
+  <target name="-exec-molecule-test">
+    <echo message="Suite: ${molecule.suite}" />
+    <antcall target="-exec-molecule">
+      <param name="moleculeCommand" value="test"/>
+    </antcall>
+  </target>
+  <target name="-exec-molecule-verify">
+    <echo message="Suite: ${molecule.suite}" />
+    <antcall target="-exec-molecule">
+      <param name="moleculeCommand" value="verify"/>
+    </antcall>
+  </target>
+  <target name="-exec-molecule">
+    <echo message="Name: ${molecule.name}"/>
+    <echo message="Image: ${molecule.image}"/>
+    <exec executable="bin/molecule-ci" failonerror="${molecule.failonerror}">
+      <env key="TMPDIR" value="${dir.temp}" />
+      <env key="ANSIBLE_FORCE_COLOR" value="true" />
+
+      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
+      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
+      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
+
+      <arg value="${moleculeCommand}" />
+      <arg line="-s ${molecule.suite}" />
+    </exec>
+  </target>
+
+</project>
