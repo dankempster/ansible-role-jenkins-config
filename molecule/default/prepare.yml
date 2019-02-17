@@ -6,12 +6,6 @@
     - ../role-stubs/defaults_geerlingguy.jenkins.yml
     
   tasks:
-    - name: Update
-      apt:
-        update_cache: true
-        upgrade: false
-        install_recommends: false
-
     #
     ## Geerlingguy.jenkins
     - name: Get Jenkins admin password from file.
