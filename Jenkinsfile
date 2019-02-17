@@ -53,15 +53,13 @@ pipeline {
           post {
             failure {
               script {
-                try {
-                  withAnt(installation: 'System') {
-                    sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy"
-                  }
-                } catch (Exception e) { }
+                withAnt(installation: 'System') {
+                  sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy-safe"
+                }
               }
             }
             always {
-              junit 'build/reports/**/*.xml'
+              junit 'build/**/reports/**/*.xml'
             }
           }
         }
@@ -81,15 +79,13 @@ pipeline {
           post {
             failure {
               script {
-                try {
-                  withAnt(installation: 'System') {
-                    sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy"
-                  }
-                } catch (Exception e) { }
+                withAnt(installation: 'System') {
+                  sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy-safe"
+                }
               }
             }
             always {
-              junit 'build/reports/**/*.xml'
+              junit 'build/**/reports/**/*.xml'
             }
           }
         }

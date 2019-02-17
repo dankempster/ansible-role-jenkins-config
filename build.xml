@@ -1,93 +1,54 @@
 <project name="ansible-role-jenkins-config" basedir=".">
-  <!-- Sets properties for macosx/windows/linux depending on current system -->
-  <condition property="macos">
-    <and>
-    <os family="mac" />
-      <not>
-        <os family="unix" />
-      </not>
-    </and>
+  <condition property="build.distro" value="raspbian" else="debian">
+    <os family="unix" arch="arm" />
   </condition>
-  <condition property="linux_x86">
-    <and>
-      <os family="unix" />
-      <not>
-        <os family="mac"/>
-      </not>
-      <not>
-        <os arch="arm"/>
-      </not>
-    </and>
-  </condition>
-  <condition property="linux_arm">
+  <condition property="build.distro.version" value="stretch" else="9">
     <os family="unix" arch="arm" />
   </condition>
 
-  <property name="dir.bin" location="bin"/>
-  <property name="dir.build" location="build" />
-  <property name="dir.reports" location="${dir.build}/reports" />
-  <property name="dir.src" location="." />
-  <property name="dir.tmp" location="${dir.build}/tmp" />
+  <property name="dir.build"
+    location="build/${build.distro}-${build.distro.version}" />
   
-  <condition property="molecule.image"
-    value="dankempster/raspbian-jenkins-ansible:stretch-0.4"
-    else="dankempster/debian-jenkins-ansible:9-0.4"
-  >
-    <os family="unix" arch="arm" />
-  </condition>
-  <condition property="build.distro"
-    value="raspbian"
-    else="debian9"
-  >
-    <os family="unix" arch="arm" />
-  </condition>
-  <property name="molecule.name" value="${build.distro}" />
-  
+  <property name="molecule.image"
+    value="dankempster/${build.distro}-jenkins-ansible:${build.distro.version}-0.4"
+  />
+  <property name="molecule.name" value="${build.distro}-${build.distro.version}" />
+
 
   <!-- #####################
-    == Create a D
+    == Run tests in CI environment
   -->
-  <target name="compile"
-    depends="virtenv"
-    description="Run the role against a docker container target. The container remains running after the fact."
-  >
-    <echo message="TestEnv: ${molecule.image}"/>
-    <mkdir dir="${dir.tmp}" />
-    <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.tmp}" />
-      <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
-      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
-      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
-      <arg value="converge" />
-    </exec>
-  </target>
+  <target name="ci"
+    description="Runs the tests, intended for a CI environment"
+    depends="destroy-safe, test" />
 
 
   <!-- #####################
     == Clean build artifacts
   -->
   <target name="clean"
-    description="Clean build artifacts (destructive)"
+    description="Delete build/ directory"
   >
-    <delete dir="${dir.reports}" />
-    <delete dir="${dir.tmp}" />
+    <delete dir="${dir.build}" />
+  </target>
+
+
+  <!-- ######################
+    == Run 'molecule destroy'
+  -->
+  <target name="destroy"
+    description="Run 'molecule destroy'"
+    depends="virtenv"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-destroy" />
   </target>
   
-  <target name="clean-test" depends="destroy, test" />
-  
-  <target name="destroy"
-    depends="prepare, virtenv"
+  <target name="destroy-safe"
+    depends="virtenv"
   >
-    <mkdir dir="${dir.tmp}" />
-    <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.tmp}" />
-      <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
-      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
-      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
-      <arg value="destroy" />
-    </exec>
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-destroy">
+      <property name="molecule.failonerror" value="false" />
+    </ant>
   </target>
 
 
@@ -95,31 +56,32 @@
     == Lint the project
   -->
   <target name="lint"
-    depends="prepare, virtenv"
+    depends="virtenv"
     description="Lint the project"
   >
-    <mkdir dir="${dir.tmp}" />
-    <exec executable="bin/molecule-ci" failonerror="false">
-      <env key="TMPDIR" value="${dir.tmp}" />
-      <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
-      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
-      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
-      <arg value="lint" />
-    </exec>
-  </target>
-
-  <target name="prepare">
-    <mkdir dir="${dir.build}"/>
-    <mkdir dir="${dir.tmp}"/>
-    <mkdir dir="${dir.reports}"/>
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule">
+      <property name="molecule.command" value="lint" />
+      <property name="molecule.failonerror" value="false" />
+    </ant>
   </target>
   
+
   <target name="reset"
     depends="clean, destroy"
-    description="Reset the workspace (destructive)"
+    description="Performs a 'clean' and deletes the Python virtual environment."
   >
     <delete dir="virtenv" />
+  </target>
+  
+
+  <!-- ####################
+    == Run the Ansible Role
+  -->
+  <target name="run"
+    depends="virtenv"
+    description="Run 'molecule converge'"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-converge" />
   </target>
   
 
@@ -127,16 +89,8 @@
     == Run all the tests
   -->
   <target name="test"
-    depends="lint, test-molecule"
-    description="Run everything"
-  />
-  <target name="test-ci"
-    depends="test, destroy"
-    description="Sames as 'test', but destroys the test comtaier(s) afterwards."
-  />
-  <target name="test-molecule"
-    depends="compile, verify"
-    description="Run the molecule tests"
+    depends="run, verify, destroy"
+    description="Run the Default molecule test suite"
   />
 
 
@@ -144,19 +98,10 @@
     == Run tests without building
   -->
   <target name="verify"
-    depends="clean, prepare, virtenv"
-    description="Run all the tests against the existing build"
+    depends="virtenv, clean"
+    description="Run 'molecule verify'"
   >
-    <mkdir dir="${dir.reports}" />
-    <mkdir dir="${dir.tmp}" />
-    <exec executable="bin/molecule-ci" failonerror="true">
-      <env key="TMPDIR" value="${dir.tmp}" />
-      <env key="ANSIBLE_FORCE_COLOR" value="true" />
-      <env key="MOLECULE_JENKINS_NAME" value="${molecule.name}" />
-      <env key="MOLECULE_JENKINS_IMAGE" value="${molecule.image}" />
-      <env key="MOLECULE_BUILD_REPORTS" value="${dir.reports}" />
-      <arg value="verify" />
-    </exec>
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-verify" />
   </target>
 
 
