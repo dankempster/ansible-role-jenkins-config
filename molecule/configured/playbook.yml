@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars_files:
+    - ../role-stubs/defaults_geerlingguy.jenkins.yml
+  vars:
+    jenkins_seed_job_file: "jobs/seed-job.xml"
+    jenkins_seed_job_name: "My Seed Job"
+    # we don't want it running while we test stuff
+    jenkins_seed_job_enabled: false
+
+  roles:
+    - role: ../../../

@@ -75,5 +75,10 @@ jenkins_security_disable_signup: true
 jenkins_security_captcha: false
 jenkins_security_disable_remember_me: false
 
+jenkins_seed_job_file: ""
+jenkins_seed_job_config: ""
+jenkins_seed_job_name: "Seed Job"
+jenkins_seed_job_enabled: true
+
 jenkins_install_distro_packages: []
 jenkins_install_pip_packages: []

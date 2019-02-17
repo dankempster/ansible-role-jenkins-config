@@ -1,0 +1,58 @@
+<!-- 1. seed-jenkins -->
+<project>
+    <actions></actions>
+    <description>Sets up seeding jobs in Jenkins. This job is set up by my Jenkins-Config ansible role.</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <com.coravy.hudson.plugins.github.GithubProjectProperty>
+            <projectUrl>https://github.com/dankempster/jenkins-dsl/</projectUrl>
+        </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    </properties>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <hudson.triggers.SCMTrigger>
+            <spec>H/15 * * * *</spec>
+            <ignorePostCommitHooks>false</ignorePostCommitHooks>
+        </hudson.triggers.SCMTrigger>
+    </triggers>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <javaposse.jobdsl.plugin.ExecuteDslScripts>
+            <targets>infrastructure-as-code.groovy</targets>
+            <usingScriptText>false</usingScriptText>
+            <scriptText></scriptText>
+            <ignoreExisting>false</ignoreExisting>
+            <removedJobAction>DISABLE</removedJobAction>
+            <removedViewAction>IGNORE</removedViewAction>
+            <lookupStrategy>JENKINS_ROOT</lookupStrategy>
+            <additionalClasspath></additionalClasspath>
+        </javaposse.jobdsl.plugin.ExecuteDslScripts>
+    </builders>
+    <publishers></publishers>
+    <buildWrappers></buildWrappers>
+    <displayName>Seed Jenkins</displayName>
+    <scm class='hudson.plugins.git.GitSCM'>
+        <userRemoteConfigs>
+            <hudson.plugins.git.UserRemoteConfig>
+                <name>origin</name>
+                <url>git@github.com:dankempster/jenkins-dsl.git</url>
+                <credentialsId>com.github.dankempster.key</credentialsId>
+            </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+            <hudson.plugins.git.BranchSpec>
+                <name>master</name>
+            </hudson.plugins.git.BranchSpec>
+        </branches>
+        <configVersion>2</configVersion>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <gitTool>Default</gitTool>
+        <browser class='hudson.plugins.git.browser.GithubWeb'>
+            <url>https://github.com/dankempster/jenkins-dsl/</url>
+        </browser>
+    </scm>
+</project>
+

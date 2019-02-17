@@ -20,3 +20,9 @@
 - name: Configure github
   include: integrations/github/configure.yml
   when: jenkins_github_enabled
+
+- name: Configure Seed Job
+  include: plugins/jobdsl/configure.yml
+  when: |
+    jenkins_seed_job_file != ''
+    or jenkins_seed_job_config != ''

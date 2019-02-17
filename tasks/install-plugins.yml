@@ -29,16 +29,6 @@
   when: jenkins_admin_password != ""
   notify: restart jenkins
 
-- name: Configure DSL
-  template:
-    src: "templates/core/job-dsl/security-config.xml.j2"
-    dest: "{{ jenkins_home }}/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
-    owner: "{{ jenkins_process_user }}"
-    group: "{{ jenkins_process_group }}"
-    mode: 0440
-  notify: restart jenkins
-  become: true
-
 # ensure Jenkins is restarted if need be, by flushing the handlers
 - name: "Meta: Flush handlers"
   meta: flush_handlers

@@ -1,0 +1,105 @@
+<project name="ansible-role-jenkins-config" basedir=".">
+  <condition property="build.distro" value="raspbian" else="debian">
+    <os family="unix" arch="arm" />
+  </condition>
+  <condition property="build.distro.version" value="stretch" else="9">
+    <os family="unix" arch="arm" />
+  </condition>
+
+  <property name="dir.build"
+    location="build/${build.distro}-${build.distro.version}/${molecule.suite}" />
+  
+  <property name="molecule.image"
+    value="dankempster/${build.distro}-jenkins-ansible:${build.distro.version}-0.4"
+  />
+  <property name="distro.name" value="${build.distro}-${build.distro.version}" />
+  <property name="molecule.suite" value="default" />
+  <property name="molecule.name" value="${distro.name}-${molecule.suite}" />
+
+
+  <!-- #####################
+    == Run tests in CI environment
+  -->
+  <target name="ci"
+    description="Runs the tests, intended for a CI environment"
+    depends="destroy-safe, test" />
+
+
+  <!-- #####################
+    == Clean build artifacts
+  -->
+  <target name="clean"
+    description="Delete build/ directory"
+  >
+    <delete dir="${dir.build}" />
+  </target>
+
+
+  <!-- ######################
+    == Run 'molecule destroy'
+  -->
+  <target name="destroy"
+    description="Run 'molecule destroy'"
+    depends="virtenv"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-destroy" />
+  </target>
+  
+  <target name="destroy-safe"
+    depends="virtenv"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-destroy">
+      <property name="molecule.failonerror" value="false" />
+    </ant>
+  </target>
+  
+
+  <!-- ####################
+    == Run the Ansible Role
+  -->
+  <target name="run"
+    depends="virtenv"
+    description="Run 'molecule converge'"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-converge" />
+  </target>
+  
+
+  <!-- #####################
+    == Run all the tests
+  -->
+  <target name="test"
+    depends="run, verify, destroy"
+    description="Run the Default molecule test suite"
+  />
+
+
+  <!-- ##########################
+    == Run tests without building
+  -->
+  <target name="verify"
+    depends="virtenv, clean"
+    description="Run 'molecule verify'"
+  >
+    <ant antfile="build.exec-molecule.xml" target="-exec-molecule-verify" />
+  </target>
+
+
+  <!-- ##########################
+    == Set up a python VirtualEnv
+  -->
+  <target name="virtenv">
+    <exec executable="virtualenv" failonerror="true">
+      <arg value="virtenv" />
+    </exec>
+    <exec executable="virtenv/bin/pip" failonerror="true">
+      <arg value="install" />
+      <arg value="--upgrade" />
+      <arg value="ansible" />
+      <arg value="molecule" />
+      <arg value="docker" />
+      <arg value="jmespath" />
+      <arg value="xmlunittest" />
+    </exec>
+  </target>
+</project>

@@ -1,0 +1,36 @@
+---
+- name: Configure Job DSL plugin
+  template:
+    src: "templates/core/job-dsl/security-config.xml.j2"
+    dest: "{{ jenkins_home }}/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
+    mode: 0440
+  notify: restart jenkins
+  become: true
+
+- name: Add Seed Job (from file)
+  jenkins_job:
+    config: "{{ lookup('file', jenkins_seed_job_file) }}"
+    name: "{{ jenkins_seed_job_name }}"
+    password: "{{ jenkins_admin_password }}"
+    url: "{{ jenkins_uri }}"
+    user: "{{ jenkins_admin_username}}"
+  when: jenkins_seed_job_file != ''
+
+- name: Add Seed Job (from var)
+  jenkins_job:
+    config: "jenkins_seed_job_config"
+    name: "{{ jenkins_seed_job_name }}"
+    password: "{{ jenkins_admin_password }}"
+    url: "{{ jenkins_uri }}"
+    user: "{{ jenkins_admin_username}}"
+  when: jenkins_seed_job_config != ''
+
+- name: Ensure Seed Job is enabled/disabled
+  jenkins_job:
+    enabled: "{{ jenkins_seed_job_enabled }}"
+    name: "{{ jenkins_seed_job_name }}"
+    password: "{{ jenkins_admin_password }}"
+    url: "{{ jenkins_uri }}"
+    user: "{{ jenkins_admin_username}}"

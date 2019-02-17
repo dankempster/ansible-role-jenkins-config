@@ -1,0 +1,31 @@
+---
+- name: Ensure JobDSL's pip deps will be installed
+  set_fact:
+    jenkins_install_pip_packages: "{{ jenkins_install_pip_packages
+      + [item]
+      }}"
+  when: "item not in jenkins_install_pip_packages"
+  with_items:
+    - setuptools
+    - python-jenkins
+    - lxml
+
+- name: Ensure JobDSL's distro deps. will be installed
+  set_fact:
+    jenkins_install_distro_packages: "{{ jenkins_install_distro_packages
+      + [item]
+      }}"
+  when: "item not in jenkins_install_distro_packages"
+  with_items:
+    - python-dev
+    - libxml2-dev
+    - libxslt-dev
+
+- name: Ensure Jenkins' jobdsl plugin will be install
+  set_fact:
+    jenkins_config_plugins: "{{ jenkins_config_plugins
+      + [{'name':'jobdsl'}]
+      }}"
+  when: "(
+      jenkins_config_plugins | json_query('[?name==`jobdsl`].name')
+    ) | count == 0"

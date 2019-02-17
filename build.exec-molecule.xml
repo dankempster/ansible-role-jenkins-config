@@ -5,6 +5,7 @@
   <condition property="build.distro.version" value="stretch" else="9">
     <os family="unix" arch="arm" />
   </condition>
+
   
   <property name="dir.build" location="build/${build.distro}-${build.distro.version}" />
   <property name="dir.reports" location="${dir.build}/reports" />
@@ -12,8 +13,8 @@
   
   <property name="molecule.failonerror" value="true" />
   <property name="molecule.image" value="" />
-  <property name="molecule.name" value="${build.distro}-${build.distro.version}" />
   <property name="molecule.suite" value="default" />
+  <property name="molecule.name" value="${build.distro}-${build.distro.version}-${molecule.suite}" />
 
   <target name="-exec-molecule-converge">
     <echo message="Suite: ${molecule.suite}" />

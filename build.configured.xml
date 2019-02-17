@@ -1,0 +1,59 @@
+<project name="ansible-role-jenkins-config" basedir=".">
+  
+
+  <property name="molecule.suite" value="configured" />
+
+
+  <!-- #####################
+    == Run tests in CI environment
+  -->
+  <target name="ci"
+    description="Runs the tests, intended for a CI environment"
+  >
+    <ant antfile="build.default.xml" target="ci" />
+  </target>
+
+
+  <!-- ######################
+    == Run 'molecule destroy'
+  -->
+  <target name="destroy"
+    description="Run 'molecule destroy'"
+  >
+    <ant antfile="build.default.xml" target="destroy" />
+  </target>
+  
+  <target name="destroy-safe">
+    <ant antfile="build.default.xml" target="destroy-safe" />
+  </target>
+  
+
+  <!-- ####################
+    == Run the Ansible Role
+  -->
+  <target name="run"
+    description="Run 'molecule converge' for the '${molecule.suite}' suite" 
+  >
+    <ant antfile="build.default.xml" target="run" />
+  </target>
+  
+
+  <!-- #####################
+    == Run all the tests
+  -->
+  <target name="test"
+    description="Run the '${molecule.suite}' molecule test suite"
+  >
+    <ant antfile="build.default.xml" target="test" />
+  </target>
+
+
+  <!-- ##########################
+    == Run tests without building
+  -->
+  <target name="verify"
+    description="Run 'molecule verify'"
+  >
+    <ant antfile="build.default.xml" target="verify" />
+  </target>
+</project>

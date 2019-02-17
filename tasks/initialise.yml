@@ -68,3 +68,13 @@
 ### INTEGRATIONS
 #
 - include: integrations/github/initialise.yml
+
+
+#
+#
+### PLUGINS
+#
+- include: plugins/jobdsl/initialise.yml
+  when: |
+    jenkins_seed_job_file != ''
+    or jenkins_seed_job_config != ''

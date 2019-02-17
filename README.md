@@ -137,8 +137,13 @@ jenkins_ant_installations: []
 ### Job DSL Variables
 
 ```
-jenkins_dsl_enabled: false
 jenkins_dsl_security: true
+
+# Initally configure Jenkins with a 'Seed Job'
+jenkins_seed_job_file: ''
+jenkins_seed_job_config: ''
+jenkins_seed_job_enabled: true
+jenkins_seed_job_name: "Seed Job"
 ```
 
 
