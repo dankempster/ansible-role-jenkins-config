@@ -35,12 +35,13 @@
   >
     <os family="unix" arch="arm" />
   </condition>
-  <condition property="molecule.name"
-    value="raspbian-stretch"
-    else="debian-9"
+  <condition property="build.distro"
+    value="raspbian"
+    else="debian9"
   >
     <os family="unix" arch="arm" />
   </condition>
+  <property name="molecule.name" value="${build.distro}" />
   
 
   <!-- #####################
