@@ -68,11 +68,6 @@ Used for setting a URL prefix for your Jenkins installation. The option is added
 Amount of time and number of times to wait when connecting to Jenkins after initial startup, to verify that Jenkins is running. Total time to wait = `delay` * `retries`, so by default this role will wait up to 300 seconds before timing out.
 
 ```
-jenkins_owner: jenkins
-jenkins_group: jenkins
-```
-
-```
 jenkins_config_executors: 2
 ```
 

@@ -1,29 +1,4 @@
 ---
-# Update Jenkins so that plugin updates don't fail.
-- name: Create update directory
-  file:
-    path: "{{ jenkins_home }}/updates"
-    state: directory
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
-  become: true
-
-- name: Download current plugin updates from Jenkins update site
-  get_url:
-    url: http://updates.jenkins-ci.org/update-center.json
-    dest: "{{ jenkins_home }}/updates/default.json"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
-    mode: 0440
-  changed_when: false
-  become: true
-
-- name: Remove first and last line from json file
-  replace:
-    path: "{{ jenkins_home }}/updates/default.json"
-    regexp: "1d;$d"
-  become: true
-
 - name: Ensure Job-DSL will be installed
   set_fact:
     jenkins_config_plugins: "{{ jenkins_config_plugins
@@ -34,7 +9,12 @@
       jenkins_config_plugins | json_query('[?name==`job-dsl`].name')
     ) | count == 0"
 
+- name: Admin password
+  debug:
+    var: jenkins_admin_password
+
 - name: Install Jenkins plugins using password.
+  become: true
   jenkins_plugin:
     name: "{{ item.name | default(item) }}"
     jenkins_home: "{{ jenkins_home }}"
@@ -45,6 +25,8 @@
     updates_expiration: "{{ item.updates_expiration | default(jenkins_plugin_updates_expiration) }}"
     url: "{{ jenkins_uri }}"
     with_dependencies: "{{ item.with_dependencies | default(jenkins_plugins_install_dependencies) }}"
+    # 2019-02-10: updates.jenkins-ci.org SSL cert expired on 2019-02-09 :-(
+    validate_certs: false
   with_items: "{{ jenkins_config_plugins }}"
   when: jenkins_admin_password != ""
   notify: restart jenkins
@@ -53,8 +35,8 @@
   template:
     src: "templates/core/job-dsl/security-config.xml.j2"
     dest: "{{ jenkins_home }}/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0440
   notify: restart jenkins
   become: true

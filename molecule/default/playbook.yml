@@ -6,7 +6,4 @@
     - ../role-stubs/defaults_geerlingguy.jenkins.yml
 
   roles:
-    - role: geerlingguy.git
-      become: true
-
     - role: ../../../

@@ -153,6 +153,7 @@ dmypy.json
 
 ### Python Patch ###
 .venv/
+virtenv/
 
 ### SublimeText ###
 # Cache files for Sublime Text

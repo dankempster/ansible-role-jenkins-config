@@ -1,110 +1,52 @@
 ---
 
-
-# jenkins_plugin module doesn't support password files.
-- name: Get Jenkins admin password from file.
-  slurp:
-    src: "{{ jenkins_admin_password_file }}"
-  register: adminpasswordfile
-  no_log: true
-  when: jenkins_admin_password_file != ""
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
-
-- name: Set Jenkins admin password fact.
-  set_fact:
-    jenkins_admin_password: "{{ adminpasswordfile['stdout']
-      | default(jenkins_admin_password) }}"
-  no_log: true
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
-
-
 #
 #
 ### CONFIG
 #
-- name: Ensure Jenkins secret key
-  copy:
-    dest: "{{ jenkins_home }}/{{ item.path }}"
-    content: "{{ item.secret }}"
-    mode: 0640
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
-    force: false
-  become: true
-  notify: restart jenkins
-  when: item.secret | default(false, true) != false
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
-  with_items:
-    - secret: "{{ jenkins_secret_key }}"
-      path: secret.key
-
 - name: Configure Jenkins
   template:
     src: templates/jenkins/config.xml.j2
     dest: "{{ jenkins_home }}/config.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins location
   template:
     src: templates/jenkins/location.xml.j2
     dest: "{{ jenkins_home }}/jenkins.model.JenkinsLocationConfiguration.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins CLI
   template:
     src: templates/jenkins/cli.xml.j2
     dest: "{{ jenkins_home }}/jenkins.CLI.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - name: Configure Jenkins Shell
   template:
     src: templates/jenkins/shell.xml.j2
     dest: "{{ jenkins_home }}/hudson.tasks.Shell.xml"
-    owner: "{{ jenkins_owner }}"
-    group: "{{ jenkins_group }}"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
     mode: 0644
     backup: "yes"
   become: true
   notify: restart jenkins
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
-
-
-#
-#
-### FARM
-#
-- name: Set up a build farm
-  include: farm/initialise.yml
-  when: jenkins_farm_enabled
 
 
 #
@@ -112,16 +54,13 @@
 ### TOOLS
 #
 - include: tools/git/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
+
+- include: tools/python/initialise.yml
+  when: jenkins_python_enabled
 
 - include: tools/ant/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 - include: tools/nodejs/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
 
 
 #
@@ -129,24 +68,3 @@
 ### INTEGRATIONS
 #
 - include: integrations/github/initialise.yml
-  when: not jenkins_farm_enabled
-    or jenkins_farm_role == 'master'
-
-
-#
-#
-### ENVIRONMENTS
-#
-- include: environments/python.yml
-  when: jenkins_env_python_enabled
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )
-
-- include: environments/ansible-molecule.yml
-  when: jenkins_env_molecule_enabled
-    and (
-      not jenkins_farm_enabled
-      or jenkins_farm_role == 'master'
-    )

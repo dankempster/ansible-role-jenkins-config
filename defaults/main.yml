@@ -2,8 +2,6 @@
 jenkins_config_plugins: []
 jenkins_config_shell: /bin/bash
 
-jenkins_secret_key: ~
-
 jenkins_cli_enabled: true
 
 jenkins_git_installations: []
@@ -23,8 +21,7 @@ jenkins_github_servers:
     credentials_id: "{{ jenkins_github_token_id }}"
     client_cache_size: 20
 
-jenkins_env_python_enabled: false
-jenkins_env_molecule_enabled: false
+jenkins_python_enabled: false
 
 jenkins_credentials_user_pass: []
 jenkins_credentials_ssh_private_keys: []
@@ -39,9 +36,6 @@ jenkins_ant_installations: []
 jenkins_dsl_enabled: false
 jenkins_dsl_security: true
 
-jenkins_user: jenkins
-jenkins_owner: jenkins
-jenkins_group: jenkins
 # password for SSH user. Defaults to jenkins_admin_password when blank.
 jenkins_user_password: ""
 
@@ -83,10 +77,3 @@ jenkins_security_disable_remember_me: false
 
 jenkins_install_distro_packages: []
 jenkins_install_pip_packages: []
-
-# name of master node for this farm
-jenkins_farm_enabled: false
-jenkins_farm_master: jenkins_master
-jenkins_farm_role: "{{
-  (inventory_hostname == jenkins_farm_master) | ternary('master', 'slave')
-  }}"

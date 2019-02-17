@@ -8,8 +8,3 @@
 
 - name: Setup Jenkins
   include: setup.yml
-  when: jenkins_farm_role == 'master'
-
-- name: Setup Jenkins farm
-  include: farm/setup.yml
-  when: jenkins_farm_enabled
