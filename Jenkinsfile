@@ -51,13 +51,17 @@ pipeline {
           }
 
           post {
+            failure {
+              script {
+                try {
+                  withAnt(installation: 'System') {
+                    sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy"
+                  }
+                } catch (Exception e) { }
+              }
+            }
             always {
               junit 'build/reports/**/*.xml'
-            }
-            cleanup {
-              withAnt(installation: 'System') {
-                sh "ant -Dmolecule.name=${MOLECULE_NAME_DEBIAN_9} destroy"
-              }
             }
           }
         }
@@ -75,13 +79,17 @@ pipeline {
           }
 
           post {
+            failure {
+              script {
+                try {
+                  withAnt(installation: 'System') {
+                    sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy"
+                  }
+                } catch (Exception e) { }
+              }
+            }
             always {
               junit 'build/reports/**/*.xml'
-            }
-            cleanup {
-              withAnt(installation: 'System') {
-                sh "ant -Dmolecule.name=${MOLECULE_NAME_RASPBIAN_STRETCH} destroy"
-              }
             }
           }
         }
