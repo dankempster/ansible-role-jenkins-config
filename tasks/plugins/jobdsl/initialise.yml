@@ -21,6 +21,10 @@
     - libxml2-dev
     - libxslt-dev
 
+    # do either of these make my error go away?
+    # - lib1g-dev
+    - zlib1g-dev
+
 - name: Ensure Jenkins' jobdsl plugin will be install
   set_fact:
     jenkins_config_plugins: "{{ jenkins_config_plugins
